@@ -1,0 +1,42 @@
+﻿@model SysPescaderiaSaavedra.Web.Models.IngresoMercaderia
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>IngresoMercaderia</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaIngreso)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaIngreso)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalCompra)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TotalCompra)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Proveedor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Proveedor.ProveedorId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Usuario)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Usuario.UsuarioId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.IngresoId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

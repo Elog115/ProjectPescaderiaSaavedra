@@ -23,7 +23,7 @@ public partial class Venta
 
     public virtual Cliente Cliente { get; set; } = null!;
 
-    public virtual ICollection<DetalleVentum> DetalleVenta { get; set; } = new List<DetalleVentum>();
+    public virtual ICollection<DetalleVenta> DetalleVenta { get; set; } = new List<DetalleVenta>();
 
     public virtual Usuario Usuario { get; set; } = null!;
 }

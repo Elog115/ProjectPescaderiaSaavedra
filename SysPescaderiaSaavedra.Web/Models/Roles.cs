@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SysPescaderiaSaavedra.Web.Models;
 
-public partial class Role
+public partial class Roles
 {
     public int RolId { get; set; }
 

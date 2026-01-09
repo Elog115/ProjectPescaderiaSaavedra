@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SysPescaderiaSaavedra.Web.Models;
 
-public partial class Proveedore
+public partial class Proveedores
 {
     public int ProveedorId { get; set; }
 
@@ -23,5 +23,5 @@ public partial class Proveedore
 
     public DateTime FechaRegistro { get; set; }
 
-    public virtual ICollection<IngresoMercaderium> IngresoMercaderia { get; set; } = new List<IngresoMercaderium>();
+    public virtual ICollection<IngresoMercaderia> IngresoMercaderia { get; set; } = new List<IngresoMercaderia>();
 }

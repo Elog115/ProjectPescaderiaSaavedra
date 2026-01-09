@@ -19,17 +19,17 @@ public partial class PescaderiaContext : DbContext
 
     public virtual DbSet<Cliente> Clientes { get; set; }
 
-    public virtual DbSet<DetalleVentum> DetalleVenta { get; set; }
+    public virtual DbSet<DetalleVenta> DetalleVenta { get; set; }
 
-    public virtual DbSet<IngresoMercaderium> IngresoMercaderia { get; set; }
+    public virtual DbSet<IngresoMercaderia> IngresoMercaderia { get; set; }
 
     public virtual DbSet<Lote> Lotes { get; set; }
 
     public virtual DbSet<Producto> Productos { get; set; }
 
-    public virtual DbSet<Proveedore> Proveedores { get; set; }
+    public virtual DbSet<Proveedores> Proveedores { get; set; }
 
-    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<Roles> Roles { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
@@ -103,7 +103,7 @@ public partial class PescaderiaContext : DbContext
                 .HasColumnName("telefono");
         });
 
-        modelBuilder.Entity<DetalleVentum>(entity =>
+        modelBuilder.Entity<DetalleVenta>(entity =>
         {
             entity.HasKey(e => e.DetalleVentaId).HasName("PK__Detalle___652699E323D89012");
 
@@ -133,7 +133,7 @@ public partial class PescaderiaContext : DbContext
                 .HasConstraintName("FK__Detalle_V__venta__6B24EA82");
         });
 
-        modelBuilder.Entity<IngresoMercaderium>(entity =>
+        modelBuilder.Entity<IngresoMercaderia>(entity =>
         {
             entity.HasKey(e => e.IngresoId).HasName("PK__Ingreso___4E42CFD9027D0CC7");
 
@@ -237,7 +237,7 @@ public partial class PescaderiaContext : DbContext
                 .HasConstraintName("FK__Productos__categ__5812160E");
         });
 
-        modelBuilder.Entity<Proveedore>(entity =>
+        modelBuilder.Entity<Proveedores>(entity =>
         {
             entity.HasKey(e => e.ProveedorId).HasName("PK__Proveedo__88BBADA49BA4A831");
 
@@ -279,7 +279,7 @@ public partial class PescaderiaContext : DbContext
                 .HasColumnName("telefono");
         });
 
-        modelBuilder.Entity<Role>(entity =>
+        modelBuilder.Entity<Roles>(entity =>
         {
             entity.HasKey(e => e.RolId).HasName("PK__Roles__CF32E4435D492887");
 

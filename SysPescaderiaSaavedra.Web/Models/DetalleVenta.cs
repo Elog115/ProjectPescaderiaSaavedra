@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SysPescaderiaSaavedra.Web.Models;
 
-public partial class DetalleVentum
+public partial class DetalleVenta
 {
     public int DetalleVentaId { get; set; }
 

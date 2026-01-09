@@ -25,7 +25,7 @@ public partial class Lote
 
     public bool Estado { get; set; }
 
-    public virtual IngresoMercaderium Ingreso { get; set; } = null!;
+    public virtual IngresoMercaderia Ingreso { get; set; } = null!;
 
     public virtual Producto Producto { get; set; } = null!;
 }
