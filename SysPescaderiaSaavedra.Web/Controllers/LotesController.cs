@@ -58,16 +58,64 @@ namespace SysPescaderiaSaavedra.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LoteId,IngresoId,ProductoId,CodigoLote,CantidadInicial,StockActual,CostoUnitario,FechaProduccion,FechaVencimiento,Estado")] Lote lote)
+        public async Task<IActionResult> Create([Bind("IngresoId,ProductoId,CantidadInicial,CostoUnitario,FechaProduccion,FechaVencimiento")] Lote lote)
         {
+            // --- 1. AJUSTE DE FECHAS (DateOnly vs DateTime) ---
+            // Obtenemos la fecha de hoy sin la hora, para poder comparar con tus campos DateOnly
+            DateOnly fechaHoy = DateOnly.FromDateTime(DateTime.Now);
+
+            // Validación A: Fecha Vencimiento vs Fecha Producción
+            // (Solo validamos si FechaProduccion tiene valor, ya que es nullable en tu modelo)
+            if (lote.FechaProduccion.HasValue && lote.FechaVencimiento <= lote.FechaProduccion.Value)
+            {
+                ModelState.AddModelError("FechaVencimiento", "La fecha de vencimiento debe ser posterior a la producción.");
+            }
+
+            // Validación B: No permitir registrar lotes ya vencidos hoy
+            if (lote.FechaVencimiento < fechaHoy)
+            {
+                ModelState.AddModelError("FechaVencimiento", "No puedes registrar un lote que ya está vencido.");
+            }
+
+            // Validación C: Cantidad positiva
+            if (lote.CantidadInicial <= 0)
+            {
+                ModelState.AddModelError("CantidadInicial", "La cantidad inicial debe ser mayor a 0.");
+            }
+
             if (ModelState.IsValid)
             {
+                // --- 2. LOGICA AUTOMÁTICA ---
+
+                lote.Estado = true;
+                lote.StockActual = lote.CantidadInicial;
+
+                // Generamos Código: AÑO-MES-DIA - ID_PROD - HORA
+                // Nota: DateTime.Now se usa aquí solo para texto, eso sí está permitido
+                lote.CodigoLote = $"{DateTime.Now:yyyyMMdd}-{lote.ProductoId}-{DateTime.Now:HHmm}";
+
+                // --- 3. ACTUALIZAR STOCK (SOLUCIÓN AL ERROR DEL DECIMAL) ---
+                var producto = await _context.Productos.FindAsync(lote.ProductoId);
+
+                if (producto != null)
+                {
+                    // CORRECCIÓN: Como StockGlobal no acepta nulos, sumamos directamente.
+                    producto.StockGlobal += lote.CantidadInicial;
+
+                    _context.Productos.Update(producto);
+                }
+
+                // --- 4. GUARDAR ---
                 _context.Add(lote);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // Recargar listas si falla
             ViewData["IngresoId"] = new SelectList(_context.IngresoMercaderia, "IngresoId", "IngresoId", lote.IngresoId);
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "ProductoId", lote.ProductoId);
+            // Nota: Agregué .Where(p => p.Estado == true) para que solo salgan productos activos
+            ViewData["ProductoId"] = new SelectList(_context.Productos.Where(p => p.Estado == true), "ProductoId", "Nombre", lote.ProductoId);
+
             return View(lote);
         }
 

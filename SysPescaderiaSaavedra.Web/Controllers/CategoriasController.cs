@@ -54,6 +54,7 @@ namespace SysPescaderiaSaavedra.Web.Controllers
         // POST: Categorias/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoriaId,Nombre")] Categoria categoria)
         {
@@ -91,12 +92,10 @@ namespace SysPescaderiaSaavedra.Web.Controllers
             return View(categoria);
         }
 
-        // POST: Categorias/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoriaId,Nombre,Estado,FechaRegistro")] Categoria categoria)
+        // 1. Quitamos Estado y FechaRegistro del Bind. Solo queremos editar el Nombre.
+        public async Task<IActionResult> Edit(int id, [Bind("CategoriaId,Nombre")] Categoria categoria)
         {
             if (id != categoria.CategoriaId)
             {
@@ -107,7 +106,20 @@ namespace SysPescaderiaSaavedra.Web.Controllers
             {
                 try
                 {
-                    _context.Update(categoria);
+                    // 2. BUSCAMOS la versión original en la base de datos
+                    var categoriaEnBd = await _context.Categorias.FindAsync(id);
+
+                    if (categoriaEnBd == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // 3. ACTUALIZAMOS SOLO LO QUE PERMITIMOS CAMBIAR
+                    categoriaEnBd.Nombre = categoria.Nombre;
+                    // Nota: No tocamos ni Estado ni FechaRegistro, así que se conservan los originales.
+
+                    // 4. Guardamos cambios
+                    _context.Update(categoriaEnBd);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

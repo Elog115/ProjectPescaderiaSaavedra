@@ -21,7 +21,13 @@ namespace SysPescaderiaSaavedra.Web.Controllers
         // GET: Productos
         public async Task<IActionResult> Index()
         {
-            var pescaderiaContext = _context.Productos.Include(p => p.Categoria);
+            // LOGICA: 
+            // 1. .Include: Hace un JOIN para traer el nombre de la Categoria
+            // 2. .Where: Solo productos activos (Borrado lógico)
+            var pescaderiaContext = _context.Productos
+                                            .Include(p => p.Categoria)
+                                            .Where(p => p.Estado == true);
+
             return View(await pescaderiaContext.ToListAsync());
         }
 
@@ -47,7 +53,12 @@ namespace SysPescaderiaSaavedra.Web.Controllers
         // GET: Productos/Create
         public IActionResult Create()
         {
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "CategoriaId");
+            // LOGICA: Solo permitir elegir categorías que estén activas
+            ViewData["CategoriaId"] = new SelectList(
+                _context.Categorias.Where(c => c.Estado == true),
+                "CategoriaId",
+                "Nombre");
+
             return View();
         }
 
@@ -56,15 +67,29 @@ namespace SysPescaderiaSaavedra.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductoId,CategoriaId,Nombre,Descripcion,UnidadMedida,PrecioVenta,StockGlobal,PublicadoWeb,Estado,FechaRegistro")] Producto producto)
+        public async Task<IActionResult> Create([Bind("ProductoId,Codigo,Nombre,Descripcion,PrecioVenta,Stock,CategoriaId")] Producto producto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(producto);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // LOGICA DE NEGOCIO:
+                producto.Estado = true;
+                producto.FechaRegistro = DateTime.Now;
+
+                // Validación extra: No permitir precios negativos
+                if (producto.PrecioVenta < 0)
+                {
+                    ModelState.AddModelError("PrecioVenta", "El precio no puede ser negativo.");
+                }
+                else
+                {
+                    _context.Add(producto);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "CategoriaId", producto.CategoriaId);
+
+            // Si algo falla, recargamos la lista de categorías para que no explote la vista
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias.Where(c => c.Estado == true), "CategoriaId", "Nombre", producto.CategoriaId);
             return View(producto);
         }
 
@@ -148,12 +173,14 @@ namespace SysPescaderiaSaavedra.Web.Controllers
             var producto = await _context.Productos.FindAsync(id);
             if (producto != null)
             {
-                _context.Productos.Remove(producto);
+                // LOGICA: Soft Delete
+                producto.Estado = false;
+                _context.Update(producto); // Actualizamos estado
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        
 
         private bool ProductoExists(int id)
         {
