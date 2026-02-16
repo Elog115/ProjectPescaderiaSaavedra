@@ -10,53 +10,67 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <style>
-        /* --- ESTILO KOI --- */
+        /* ====== PALETA PESCADERÍA ====== */
 
-        /* Naranja Koi Principal (Cuerpo del pez) */
-        .bg-koi {
-            background-color: #FF6A00 !important; /* Un naranja vibrante */
-            background: linear-gradient(90deg, #FF4E00 0%, #FF8C00 100%); /* Degradado sutil */
+        /* Navbar océano */
+        .bg-ocean {
+            background: linear-gradient(90deg, #0b5e6f 0%, #0f7c8d 100%);
         }
 
-        /* Color de texto en el navbar */
+        /* Links navbar */
         .navbar-dark .navbar-nav .nav-link {
             color: rgba(255, 255, 255, 0.9);
             font-weight: 500;
         }
 
-        .navbar-dark .navbar-nav .nav-link:hover {
-            color: #ffffff;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            .navbar-dark .navbar-nav .nav-link:hover {
+                color: #ffffff;
+                text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+            }
+
+        /* Botón Dashboard destacado */
+        .btn-dashboard {
+            background-color: #1dd3b0;
+            color: #003844;
+            font-weight: 600;
+            border-radius: 1.5rem;
+            padding: 6px 16px;
         }
 
-        /* Detalles en Negro/Gris oscuro (Manchas del Koi) */
-        .btn-koi-dark {
-            background-color: #1a1a1a;
-            color: white;
-        }
+            .btn-dashboard:hover {
+                background-color: #17b89c;
+                color: #002b36;
+            }
 
-        /* Logo Brand */
+        /* Brand */
         .navbar-brand {
             font-weight: bold;
             letter-spacing: 1px;
+        }
+
+        footer {
+            background-color: #f8f9fa;
         }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-koi box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-ocean box-shadow mb-3">
             <div class="container-fluid">
 
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <!-- LOGO -->
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     <i class="bi bi-water"></i> Pescadería Saavedra
                 </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    <!-- MENÚ IZQUIERDO -->
                     <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item">
@@ -65,53 +79,67 @@
                             </a>
                         </li>
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <!-- DASHBOARD (NUEVO) -->
+                        <li class="nav-item">
+                            <a class="btn btn-dashboard"
+                               asp-controller="Home"
+                               asp-action="Dashboard">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+
+                        </li>
+
+                        <!-- VENTAS -->
+                        <li class="nav-item dropdown ms-3">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="bi bi-cart-check-fill"></i> Ventas
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" asp-controller="Ventas" asp-action="Index">Historial de Ventas</a></li>
                                 <li><a class="dropdown-item" asp-controller="Ventas" asp-action="Create">Nueva Venta</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Clientes" asp-action="Index">Administrar Clientes</a></li>
+                                <li><a class="dropdown-item" asp-controller="Clientes" asp-action="Index">Clientes</a></li>
                             </ul>
                         </li>
 
+                        <!-- COMPRAS -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="bi bi-box-seam-fill"></i> Compras
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-controller="IngresoMercaderia" asp-action="Index">Ingresos de Mercadería</a></li>
+                                <li><a class="dropdown-item" asp-controller="IngresoMercaderia" asp-action="Index">Ingresos</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-controller="Proveedores" asp-action="Index">Proveedores</a></li>
                             </ul>
                         </li>
 
+                        <!-- INVENTARIO -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="bi bi-tags-fill"></i> Inventario
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" asp-controller="Productos" asp-action="Index">Productos</a></li>
                                 <li><a class="dropdown-item" asp-controller="Categorias" asp-action="Index">Categorías</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Lotes" asp-action="Index">Gestión de Lotes</a></li>
+                                <li><a class="dropdown-item" asp-controller="Lotes" asp-action="Index">Lotes</a></li>
                             </ul>
                         </li>
 
                     </ul>
 
+                    <!-- MENÚ DERECHO -->
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="bi bi-gear-fill"></i> Administración
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" asp-controller="Usuarios" asp-action="Index">Usuarios</a></li>
                                 <li><a class="dropdown-item" asp-controller="Roles" asp-action="Index">Roles</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+                                <li><a class="dropdown-item text-danger" href="#">Cerrar Sesión</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -129,7 +157,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container text-center">
-            &copy; 2024 - Pescadería Saavedra - Calidad Koi
+            &copy; 2026 - Pescadería Saavedra · Productos del Mar
         </div>
     </footer>
 

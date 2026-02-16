@@ -1,0 +1,180 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    var ventasSemana = ViewBag.VentasSemana;
+}
+
+<div class="container-fluid py-4">
+
+    <!-- ===== TÍTULO ===== -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-ocean">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </h2>
+            <p class="text-muted mb-0">Resumen general de la pescadería</p>
+        </div>
+        <span class="badge bg-info px-3 py-2">
+            @DateTime.Now.ToString("dd/MM/yyyy")
+        </span>
+    </div>
+
+    <!-- ===== KPIs ===== -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 kpi-card">
+                <div class="card-body position-relative">
+                    <h6 class="text-muted">Ventas del día</h6>
+                    <h3 class="fw-bold text-success">
+                        $@ViewBag.VentasHoy.ToString("N2")
+                    </h3>
+                    <i class="bi bi-cash-coin kpi-icon text-success"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 kpi-card">
+                <div class="card-body position-relative">
+                    <h6 class="text-muted">Ventas del mes</h6>
+                    <h3 class="fw-bold text-primary">
+                        $@ViewBag.VentasMes.ToString("N2")
+                    </h3>
+                    <i class="bi bi-graph-up-arrow kpi-icon text-primary"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 kpi-card">
+                <div class="card-body position-relative">
+                    <h6 class="text-muted">Stock bajo</h6>
+                    <h3 class="fw-bold text-danger">
+                        @ViewBag.StockBajo productos
+                    </h3>
+                    <i class="bi bi-exclamation-triangle kpi-icon text-danger"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== GRÁFICO ===== -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-bar-chart-line"></i> Ventas últimos 7 días
+            </h5>
+            <div id="ventasChart"></div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script>
+        var ventasData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.VentasSemana));
+
+        var options = {
+            chart: {
+                type: 'area',
+                height: 380,
+                toolbar: { show: false },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                }
+            },
+
+            series: [{
+                name: 'Ventas',
+                data: ventasData.map(x => x.total)
+            }],
+
+            xaxis: {
+                categories: ventasData.map(x => x.fecha),
+                axisBorder: { show: false },
+                axisTicks: { show: false }
+            },
+
+            yaxis: {
+                labels: {
+                    formatter: val => "$" + val.toFixed(0)
+                },
+                min: Math.min(...ventasData.map(x => x.total)) * 0.95
+            },
+
+            markers: {
+                size: 6,
+                colors: ['#1dd3b0'],
+                strokeColors: '#fff',
+                strokeWidth: 2,
+                hover: { size: 8 }
+            },
+
+            colors: ['#1dd3b0'],
+
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    opacityFrom: 0.6,
+                    opacityTo: 0.15,
+                    stops: [0, 100]
+                }
+            },
+
+            stroke: {
+                curve: 'smooth',
+                width: 4
+            },
+
+            grid: {
+                borderColor: '#e9ecef',
+                strokeDashArray: 5
+            },
+
+            tooltip: {
+                theme: 'light',
+                y: {
+                    formatter: val => "$" + val.toFixed(2)
+                }
+            }
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#ventasChart"),
+            options
+        );
+
+        chart.render();
+    </script>
+
+}
+
+<style>
+    .text-ocean {
+        color: #1dd3b0;
+    }
+
+    .kpi-card {
+        border-radius: 14px;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,.08);
+        }
+
+    .kpi-icon {
+        position: absolute;
+        right: 20px;
+        bottom: 15px;
+        font-size: 3.5rem;
+        opacity: .15;
+    }
+</style>
