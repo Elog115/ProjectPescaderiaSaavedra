@@ -1,47 +1,144 @@
 ﻿@model IEnumerable<SysPescaderiaSaavedra.Web.Models.Categoria>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gestión de Categorías";
 }
 
-<h1>Index</h1>
+<style>
+    /* ===== TABLA MEJORADA ===== */
+    .table-custom thead {
+        background-color: #f1f5f7;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaRegistro)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaRegistro)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CategoriaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CategoriaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CategoriaId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    .table-custom th {
+        font-weight: 600;
+        color: #0b5e6f;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+    }
+
+    .table-custom tbody tr:hover {
+        background-color: rgba(29, 211, 176, 0.08);
+    }
+
+    .badge-estado {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+        letter-spacing: .4px;
+    }
+
+    .badge-activo {
+        background-color: #e6f9f3;
+        color: #0f7c8d;
+    }
+
+    .badge-inactivo {
+        background-color: #fdecea;
+        color: #b42318;
+    }
+</style>
+
+<div class="card shadow-sm rounded-4">
+
+    <!-- HEADER -->
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h5 class="m-0 fw-bold text-ocean">
+            <i class="bi bi-tags-fill me-2"></i> Gestión de Categorías
+        </h5>
+
+        <a asp-action="Create" class="btn btn-success btn-sm">
+            <i class="bi bi-plus-circle"></i> Nueva Categoría
+        </a>
+    </div>
+
+    <div class="card-body">
+
+        <!-- FILTRO -->
+        <div class="mb-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input id="txtSearch" class="form-control"
+                       placeholder="Buscar categoría..." />
+                <button class="btn btn-outline-secondary" id="btnClear">
+                    Limpiar
+                </button>
+            </div>
+        </div>
+
+        <!-- TABLA -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle table-custom">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Fecha registro</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaBody">
+                    @foreach (var c in Model)
+                    {
+                        <tr class="@(c.Estado ? "" : "opacity-75")">
+                            <td class="fw-semibold col-nombre">
+                                @c.Nombre
+                            </td>
+
+                            <td class="text-center">
+                                @if (c.Estado)
+                                {
+                                    <span class="badge-estado badge-activo">
+                                        Activa
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge-estado badge-inactivo">
+                                        Inactiva
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="text-center text-muted">
+                                @c.FechaRegistro.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td class="text-end text-nowrap">
+                                <a asp-action="Edit" asp-route-id="@c.CategoriaId"
+                                   class="btn btn-sm btn-outline-primary"
+                                   title="Editar">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+
+                                @if (c.Estado)
+                                {
+                                    <a asp-action="ToggleEstado"
+                                       asp-route-id="@c.CategoriaId"
+                                       class="btn btn-sm btn-outline-danger"
+                                       title="Desactivar">
+                                        <i class="bi bi-toggle-off"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="ToggleEstado"
+                                       asp-route-id="@c.CategoriaId"
+                                       class="btn btn-sm btn-outline-success"
+                                       title="Activar">
+                                        <i class="bi bi-toggle-on"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
