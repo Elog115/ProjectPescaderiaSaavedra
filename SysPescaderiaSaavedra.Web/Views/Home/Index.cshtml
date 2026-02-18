@@ -1,257 +1,273 @@
 ﻿@{
-    ViewData["Title"] = "Pescadería Saavedra - Inicio";
+    ViewData["Title"] = "Pescadería Saavedra - Calidad desde el Mar";
 }
 
-<!-- ======================================= -->
-<!-- HERO PRINCIPAL -->
-<!-- ======================================= -->
-<section class="hero-pescaderia">
-    <div class="container py-5">
-        <div class="row align-items-center g-5">
-
-            <div class="col-lg-6">
-                <span class="badge hero-badge mb-3">
-                    Pescado fresco todos los días
+<section class="hero-minimalist">
+    <div class="hero-overlay"></div>
+    <div class="container position-relative py-5">
+        <div class="row min-vh-75 align-items-center">
+            <div class="col-lg-8 text-white">
+                <span class="location-tag mb-3 d-inline-block text-uppercase">
+                    <i class="bi bi-geo-alt-fill"></i> Acajutla, Sonsonate
                 </span>
-
-                <h1 class="hero-title mb-3">
-                    Sistema de Inventario<br />
-                    <span class="hero-highlight">Pescadería Saavedra</span>
-                </h1>
-
-                <p class="hero-subtitle mb-4">
-                    Sistema para el control de inventario, ventas y compras
-                    de productos del mar, asegurando frescura, orden y eficiencia
-                    en cada proceso del negocio.
+                <h1 class="display-2 fw-light mb-2">Pescadería</h1>
+                <h2 class="display-1 fw-bold hero-name mb-4">Saavedra Pleites</h2>
+                <p class="lead fs-4 opacity-90 mb-5 max-w-600">
+                    Frescura inigualable procesada con los más altos estándares.
+                    Del puerto directamente a tu mesa.
                 </p>
-
-                <div class="d-flex flex-wrap gap-3 mb-4">
-                    <a href="@Url.Action("Index", "Ventas")"
-                       class="btn btn-primary btn-lg d-flex align-items-center gap-2 shadow">
-                        <i class="bi bi-cash-stack"></i>
-                        <span>Registrar venta</span>
-                    </a>
-
-                    <a href="@Url.Action("Index", "Inventario")"
-                       class="btn btn-outline-light btn-lg d-flex align-items-center gap-2">
-                        <i class="bi bi-box-seam"></i>
-                        <span>Inventario</span>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#catalogo" class="btn btn-primary-minimal px-5 py-3">Explorar Productos</a>
+                    <a href="https://localhost:7003/Home/Dashboard" class="btn btn-glass px-5 py-3">
+                        <i class="bi bi-lock me-2"></i>Gestión Interna
                     </a>
                 </div>
-
-                <div class="d-flex flex-wrap gap-4 small hero-info">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-fish"></i>
-                        <span>Productos frescos</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-clipboard-check"></i>
-                        <span>Control por peso</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-speedometer2"></i>
-                        <span>Gestión rápida</span>
-                    </div>
-                </div>
             </div>
-
         </div>
     </div>
 </section>
 
-<!-- ======================================= -->
-<!-- MÓDULOS DEL SISTEMA -->
-<!-- ======================================= -->
-<section class="py-5 section-light">
+<section id="catalogo" class="py-5 bg-f9">
     <div class="container py-5">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Módulos del Sistema</h2>
-            <p class="section-subtitle">
-                Funciones diseñadas para la administración diaria de la pescadería.
-            </p>
+        <div class="header-minimalist mb-5">
+            <h2 class="fw-bold text-dark">Productos Más Vendidos</h2>
+            <p class="text-muted">Selección de frescura diaria garantizada.</p>
         </div>
 
-        <div class="row g-4 justify-content-center">
-
-            <!-- Inventario -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card module-card h-100">
-                    <div class="card-body text-center p-5">
-                        <div class="module-icon mb-3">
-                            <i class="bi bi-boxes"></i>
-                        </div>
-                        <h5 class="fw-bold">Inventario</h5>
-                        <p class="text-muted">
-                            Control de existencias, registro de productos
-                            y movimientos por peso.
-                        </p>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="product-card-modern">
+                    <div class="img-zoom-container">
+                        <img src="https://puertofresco.com/cdn/shop/products/filete_de_tilapia.jpg?v=1591908200" alt="Lonja de Pescado" class="img-fluid">
+                        <span class="badge-top">Top Ventas</span>
+                    </div>
+                    <div class="product-content">
+                        <h3>Lonja de Pescado</h3>
+                        <p>Corte premium sin espinas, ideal para filetes a la plancha.</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Ventas -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card module-card h-100">
-                    <div class="card-body text-center p-5">
-                        <div class="module-icon mb-3">
-                            <i class="bi bi-cash-coin"></i>
-                        </div>
-                        <h5 class="fw-bold">Ventas</h5>
-                        <p class="text-muted">
-                            Registro de ventas diarias, cálculo automático
-                            y control de ingresos.
-                        </p>
+            <div class="col-md-4">
+                <div class="product-card-modern">
+                    <div class="img-zoom-container">
+                        <img src="https://previews.123rf.com/images/baloncici/baloncici1107/baloncici110700281/10259725-bunch-of-fresh-shrimp-tails-at-market.jpg" alt="Cola de Camarón" class="img-fluid">
+                        <span class="badge-top">Especialidad</span>
+                    </div>
+                    <div class="product-content">
+                        <h3>Cola de Camarón</h3>
+                        <p>Limpios y frescos, perfectos para ceviches y cócteles.</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Compras -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card module-card h-100">
-                    <div class="card-body text-center p-5">
-                        <div class="module-icon mb-3">
-                            <i class="bi bi-truck"></i>
-                        </div>
-                        <h5 class="fw-bold">Compras</h5>
-                        <p class="text-muted">
-                            Gestión de proveedores y compras
-                            de productos del mar.
-                        </p>
+            <div class="col-md-4">
+                <div class="product-card-modern">
+                    <div class="img-zoom-container">
+                        <img src="https://www.cocinavital.mx/wp-content/uploads/2016/03/conoce-tipos-pescados-mariscos.jpg" alt="Variedad de Mariscos" class="img-fluid">
+                        <span class="badge-top">Fresco</span>
+                    </div>
+                    <div class="product-content">
+                        <h3>Variedad de Mariscos</h3>
+                        <p>Mix de temporada: pulpo, calamar y mejillones del día.</p>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
 
-<!-- ======================================= -->
-<!-- DESCRIPCIÓN DEL SISTEMA -->
-<!-- ======================================= -->
-<section class="py-5 bg-white">
+<section class="py-5 bg-white border-top">
     <div class="container py-5">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-7">
-                <h2 class="fw-bold text-ocean mb-3">
-                    Control y frescura en cada operación
-                </h2>
-                <p class="lead text-muted">
-                    SysPescaderiaSaavedra permite llevar un control ordenado
-                    del inventario, minimizar pérdidas y agilizar el proceso
-                    de ventas.
-                </p>
-                <p class="text-muted">
-                    Diseñado para pescaderías que buscan eficiencia,
-                    orden y una administración confiable.
-                </p>
+        <div class="row align-items-stretch g-0 rounded-4 overflow-hidden shadow-sm border">
+            <div class="col-lg-5 p-5 bg-white">
+                <h4 class="fw-bold mb-4">Información de Contacto</h4>
+                <ul class="list-unstyled contact-list">
+                    <li class="mb-4 d-flex align-items-start">
+                        <i class="bi bi-person text-primary fs-4 me-3"></i>
+                        <div>
+                            <span class="d-block text-muted small">Representante</span>
+                            <strong>Oscar Antonio Saavedra Pleites</strong>
+                        </div>
+                    </li>
+                    <li class="mb-4 d-flex align-items-start">
+                        <i class="bi bi-telephone text-primary fs-4 me-3"></i>
+                        <div>
+                            <span class="d-block text-muted small">Teléfono Directo</span>
+                            <strong>+503 6823-4819</strong>
+                        </div>
+                    </li>
+                    <li class="mb-4 d-flex align-items-start">
+                    <li class="mb-4 d-flex align-items-start">
+                        <i class="bi bi-envelope text-primary fs-4 me-3"></i>
+                        <div>
+                            <span class="d-block text-muted small">Correo Corporativo</span>
+                            <strong>pleitesantonio3@gmail.com</strong>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start">
+                        <i class="bi bi-geo-alt text-primary fs-4 me-3"></i>
+                        <div>
+                            <span class="d-block text-muted small">Dirección Fiscal</span>
+                            <strong>Av. B, Col. Acaxual 2 Et, Lote 72, Acajutla.</strong>
+                        </div>
+                    </li>
+                </ul>
             </div>
-
-            <div class="col-lg-5">
-                <div class="info-card shadow">
-                    <i class="bi bi-water fs-1 text-ocean mb-3"></i>
-                    <p class="fw-semibold mb-1">
-                        Calidad y frescura garantizada.
-                    </p>
-                    <span class="small text-muted">
-                        Pescadería Saavedra — Calidad Koi
-                    </span>
+            <div class="col-lg-7 bg-light position-relative min-h-350">
+                <div class="map-container-clean">
+                    <div class="map-info">
+                        <h5 class="mb-1">Visítanos en Acajutla</h5>
+                        <p class="small text-muted mb-3">Calle Profesor José Luis Donis, Sonsonate.</p>
+                        <a href="https://www.google.com/maps" target="_blank" class="btn btn-sm btn-dark px-4">Abrir en Google Maps</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ======================================= -->
-<!-- ESTILOS -->
-<!-- ======================================= -->
 <style>
-    .text-ocean {
-        color: #0b5e6f;
+    :root {
+        --primary-blue: #003a4d;
+        --accent-teal: #10bacd;
+        --soft-bg: #f9fbfc;
     }
 
-    /* HERO */
-    .hero-pescaderia {
-        min-height: 80vh;
-        display: flex;
-        align-items: center;
-        color: #ffffff;
-        background-image: linear-gradient( rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.65) ), url('/images/hero-pescaderia.jpg');
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Hero Moderno */
+    .hero-minimalist {
+        background-image: url('https://images.unsplash.com/photo-1551244072-5d12893278ab?q=80&w=2000&auto=format&fit=crop');
         background-size: cover;
         background-position: center;
-        background-repeat: no-repeat;
+        position: relative;
     }
 
-    .hero-badge {
-        background: rgba(255,255,255,.9);
-        color: #0b5e6f;
-        font-weight: 600;
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(0,25,35,0.9) 30%, rgba(0,25,35,0.4) 100%);
     }
 
-    .hero-title {
-        font-size: clamp(2.6rem, 3vw, 3.6rem);
-        font-weight: 800;
-        text-shadow: 0 4px 15px rgba(0,0,0,.45);
+    .hero-name {
+        letter-spacing: -2px;
+        line-height: 1;
     }
 
-    .hero-highlight {
-        color: #9de6f2;
-    }
-
-    .hero-subtitle {
-        max-width: 36rem;
-        color: #e4f3f8;
-        text-shadow: 0 2px 8px rgba(0,0,0,.35);
-    }
-
-    .hero-info {
-        color: #e4f3f8;
-    }
-
-    /* SECCIONES */
-    .section-light {
-        background: #f5fbff;
-    }
-
-    .section-title {
+    .location-tag {
+        color: var(--accent-teal);
         font-weight: 700;
-        color: #0b5e6f;
+        letter-spacing: 2px;
+        font-size: 0.85rem;
     }
 
-    .section-subtitle {
-        max-width: 36rem;
-        margin: 0 auto;
-        color: #607b86;
+    .max-w-600 {
+        max-width: 600px;
     }
 
-    /* TARJETAS */
-    .module-card {
-        border-radius: 1.5rem;
+    /* Botones Minimalistas */
+    .btn-primary-minimal {
+        background: var(--accent-teal);
         border: none;
-        box-shadow: 0 16px 40px rgba(0,0,0,.06);
-        transition: transform .25s ease;
+        color: #002533;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: 0.3s;
     }
 
-        .module-card:hover {
-            transform: translateY(-6px);
+        .btn-primary-minimal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(16, 186, 205, 0.3);
+            color: white;
         }
 
-    .module-icon {
-        width: 64px;
-        height: 64px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #0b5e6f, #0f8da1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .btn-glass {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
         color: white;
-        font-size: 1.8rem;
-        margin: 0 auto;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 8px;
     }
 
-    .info-card {
+        .btn-glass:hover {
+            background: white;
+            color: var(--primary-blue);
+        }
+
+    /* Cards de Productos */
+    .product-card-modern {
         background: white;
-        border-radius: 1.4rem;
-        padding: 1.8rem;
-        border: 1px solid #e3f3f6;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        border: 1px solid #eee;
+    }
+
+        .product-card-modern:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+    .img-zoom-container {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+
+        .img-zoom-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .badge-top {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: white;
+        color: var(--primary-blue);
+        padding: 5px 15px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .product-content {
+        padding: 25px;
+    }
+
+        .product-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+    /* Contacto y Mapa */
+    .min-h-350 {
+        min-height: 350px;
+    }
+
+    .map-container-clean {
+        background: #e9ecef url('https://i.blogs.es/6e74fb/google-maps-portada/1200_900.jpeg') center/cover;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+        padding: 30px;
+    }
+
+    .map-info {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .contact-list li strong {
+        color: var(--primary-blue);
+        font-size: 1.1rem;
     }
 </style>
