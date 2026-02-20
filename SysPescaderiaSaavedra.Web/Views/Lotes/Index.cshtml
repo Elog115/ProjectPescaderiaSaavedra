@@ -1,83 +1,270 @@
 ﻿@model IEnumerable<SysPescaderiaSaavedra.Web.Models.Lote>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gestión de Lotes";
 }
 
-<h1>Index</h1>
+<style>
+    .table-custom thead {
+        background-color: #f1f5f7;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CodigoLote)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CantidadInicial)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockActual)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CostoUnitario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaProduccion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaVencimiento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ingreso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Producto)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodigoLote)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CantidadInicial)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StockActual)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CostoUnitario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaProduccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaVencimiento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ingreso.IngresoId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Producto.ProductoId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.LoteId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LoteId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.LoteId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    .table-custom th {
+        font-weight: 600;
+        color: #0b5e6f;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+    }
+
+    .table-custom tbody tr:hover {
+        background-color: rgba(29, 211, 176, 0.08);
+    }
+
+    .badge-estado {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+        letter-spacing: .4px;
+    }
+
+    .badge-activo {
+        background-color: #e6f9f3;
+        color: #0f7c8d;
+    }
+
+    .badge-inactivo {
+        background-color: #fdecea;
+        color: #b42318;
+    }
+
+    .badge-stock-normal {
+        background-color: #eef2ff;
+        color: #3730a3;
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+    }
+
+    .badge-stock-bajo {
+        background-color: #fff4e5;
+        color: #b54708;
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 700;
+    }
+
+    .badge-stock-agotado {
+        background-color: #fdecea;
+        color: #b42318;
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 700;
+    }
+
+    .badge-vencido {
+        background-color: #fdecea;
+        color: #b42318;
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 700;
+    }
+
+    .badge-vigente {
+        background-color: #e6f9f3;
+        color: #0f7c8d;
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="card shadow-sm rounded-4">
+
+    <!-- HEADER -->
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h5 class="m-0 fw-bold text-ocean">
+            <i class="bi bi-boxes me-2"></i> Gestión de Lotes
+        </h5>
+
+        <a asp-action="Create" class="btn btn-success btn-sm">
+            <i class="bi bi-plus-circle"></i> Nuevo Lote
+        </a>
+    </div>
+
+    <div class="card-body">
+
+        <!-- BUSCADOR -->
+        <div class="mb-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input id="txtSearch" class="form-control"
+                       placeholder="Buscar lote..." />
+                <button class="btn btn-outline-secondary" id="btnClear">
+                    Limpiar
+                </button>
+            </div>
+        </div>
+
+        <!-- TABLA -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle table-custom">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Producto</th>
+                        <th>Ingreso</th>
+                        <th class="text-center">Cantidad Inicial</th>
+                        <th class="text-center">Stock Actual</th>
+                        <th class="text-center">Costo Unit.</th>
+                        <th class="text-center">Producción</th>
+                        <th class="text-center">Vencimiento</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaBody">
+                    @foreach (var item in Model)
+                    {
+                        var hoy = DateOnly.FromDateTime(DateTime.Now);
+                        var vencido = item.FechaVencimiento <= hoy;
+                        var stockBajo = item.StockActual <= 5 && item.StockActual > 0;
+
+                        <tr class="@(item.Estado ? "" : "opacity-75")">
+
+                            <td class="fw-semibold">
+                                @item.CodigoLote
+                            </td>
+
+                            <td>
+                                @item.Producto?.Nombre
+                            </td>
+
+                            <td>
+                                Ingreso #@item.IngresoId
+                            </td>
+
+                            <td class="text-center">
+                                @item.CantidadInicial
+                            </td>
+
+                            <!-- STOCK -->
+                            <td class="text-center">
+                                @if (item.StockActual <= 0)
+                                {
+                                    <span class="badge-stock-agotado">
+                                        Agotado
+                                    </span>
+                                }
+                                else if (stockBajo)
+                                {
+                                    <span class="badge-stock-bajo">
+                                        Bajo (@item.StockActual)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge-stock-normal">
+                                        @item.StockActual
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="text-center fw-semibold">
+                                $ @item.CostoUnitario.ToString("N2")
+                            </td>
+
+                            <td class="text-center text-muted">
+                                @item.FechaProduccion
+                            </td>
+
+                            <!-- VENCIMIENTO -->
+                            <td class="text-center">
+                                @if (vencido)
+                                {
+                                    <span class="badge-vencido">
+                                        Vencido
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge-vigente">
+                                        @item.FechaVencimiento
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="text-center">
+                                @if (item.Estado)
+                                {
+                                    <span class="badge-estado badge-activo">
+                                        Activo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge-estado badge-inactivo">
+                                        Inactivo
+                                    </span>
+                                }
+                            </td>
+
+                            <!-- ACCIONES -->
+                            <td class="text-end text-nowrap">
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.LoteId"
+                                   class="btn btn-sm btn-outline-primary"
+                                   title="Editar">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+
+                                <a asp-action="CambiarEstado"
+                                   asp-route-id="@item.LoteId"
+                                   class="btn btn-sm btn-outline-secondary"
+                                   title="Cambiar Estado">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- BUSCADOR SCRIPT -->
+<script>
+    document.getElementById("txtSearch").addEventListener("keyup", function () {
+        let filtro = this.value.toLowerCase();
+        let filas = document.querySelectorAll("#tablaBody tr");
+
+        filas.forEach(function (fila) {
+            let textoFila = fila.innerText.toLowerCase();
+
+            if (textoFila.includes(filtro)) {
+                fila.style.display = "";
+            } else {
+                fila.style.display = "none";
+            }
+        });
+    });
+
+    document.getElementById("btnClear").addEventListener("click", function () {
+        document.getElementById("txtSearch").value = "";
+        let filas = document.querySelectorAll("#tablaBody tr");
+        filas.forEach(fila => fila.style.display = "");
+    });
+</script>

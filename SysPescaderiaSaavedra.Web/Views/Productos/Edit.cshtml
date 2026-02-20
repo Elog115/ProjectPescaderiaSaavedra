@@ -1,74 +1,112 @@
 ﻿@model SysPescaderiaSaavedra.Web.Models.Producto
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Producto";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
 
-<h4>Producto</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ProductoId" />
-            <div class="form-group">
-                <label asp-for="CategoriaId" class="control-label"></label>
-                <select asp-for="CategoriaId" class="form-control" asp-items="ViewBag.CategoriaId"></select>
-                <span asp-validation-for="CategoriaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UnidadMedida" class="control-label"></label>
-                <input asp-for="UnidadMedida" class="form-control" />
-                <span asp-validation-for="UnidadMedida" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrecioVenta" class="control-label"></label>
-                <input asp-for="PrecioVenta" class="form-control" />
-                <span asp-validation-for="PrecioVenta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StockGlobal" class="control-label"></label>
-                <input asp-for="StockGlobal" class="form-control" />
-                <span asp-validation-for="StockGlobal" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="PublicadoWeb" /> @Html.DisplayNameFor(model => model.PublicadoWeb)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
-                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-warning text-dark rounded-top-4">
+            <h4 class="mb-0">
+                ✏️ Editar Producto
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit">
+
+                <input type="hidden" asp-for="ProductoId" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="CategoriaId" class="form-label fw-bold"></label>
+                        <select asp-for="CategoriaId"
+                                class="form-select"
+                                asp-items="ViewBag.CategoriaId">
+                        </select>
+                        <span asp-validation-for="CategoriaId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Nombre" class="form-label fw-bold"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Descripcion" class="form-label fw-bold"></label>
+                        <input asp-for="Descripcion" class="form-control" />
+                        <span asp-validation-for="Descripcion" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="UnidadMedida" class="form-label fw-bold"></label>
+                        <input asp-for="UnidadMedida" class="form-control" />
+                        <span asp-validation-for="UnidadMedida" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="PrecioVenta" class="form-label fw-bold"></label>
+                        <input asp-for="PrecioVenta" class="form-control" />
+                        <span asp-validation-for="PrecioVenta" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="StockGlobal" class="form-label fw-bold"></label>
+                        <input asp-for="StockGlobal" class="form-control" readonly />
+                        <small class="text-muted">
+                            ⚠ El stock se gestiona por lotes
+                        </small>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="FechaRegistro" class="form-label fw-bold"></label>
+                        <input asp-for="FechaRegistro" class="form-control" readonly />
+                    </div>
+
+                </div>
+
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" asp-for="PublicadoWeb" />
+                    <label class="form-check-label fw-bold">
+                        Publicado en Web
+                    </label>
+                </div>
+
+                <div class="form-check form-switch mb-4">
+                    <input class="form-check-input" asp-for="Estado" />
+                    <label class="form-check-label fw-bold">
+                        Activo
+                    </label>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                        ⬅ Volver
+                    </a>
+
+                    <button type="submit" class="btn btn-warning rounded-pill px-4">
+                        💾 Guardar Cambios
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

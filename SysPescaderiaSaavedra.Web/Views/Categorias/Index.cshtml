@@ -5,7 +5,6 @@
 }
 
 <style>
-    /* ===== TABLA MEJORADA ===== */
     .table-custom thead {
         background-color: #f1f5f7;
     }
@@ -55,7 +54,7 @@
 
     <div class="card-body">
 
-        <!-- FILTRO -->
+        <!-- BUSCADOR -->
         <div class="mb-4">
             <div class="input-group">
                 <span class="input-group-text bg-light">
@@ -85,7 +84,7 @@
                     @foreach (var c in Model)
                     {
                         <tr class="@(c.Estado ? "" : "opacity-75")">
-                            <td class="fw-semibold col-nombre">
+                            <td class="fw-semibold">
                                 @c.Nombre
                             </td>
 
@@ -142,3 +141,27 @@
 
     </div>
 </div>
+
+<!-- SCRIPT BUSCADOR -->
+<script>
+    document.getElementById("txtSearch").addEventListener("keyup", function () {
+        let filtro = this.value.toLowerCase();
+        let filas = document.querySelectorAll("#tablaBody tr");
+
+        filas.forEach(function (fila) {
+            let textoFila = fila.innerText.toLowerCase();
+
+            if (textoFila.includes(filtro)) {
+                fila.style.display = "";
+            } else {
+                fila.style.display = "none";
+            }
+        });
+    });
+
+    document.getElementById("btnClear").addEventListener("click", function () {
+        document.getElementById("txtSearch").value = "";
+        let filas = document.querySelectorAll("#tablaBody tr");
+        filas.forEach(fila => fila.style.display = "");
+    });
+</script>

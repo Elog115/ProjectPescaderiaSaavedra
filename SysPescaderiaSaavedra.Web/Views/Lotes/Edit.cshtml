@@ -1,74 +1,90 @@
 ﻿@model SysPescaderiaSaavedra.Web.Models.Lote
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Lote";
 }
 
-<h1>Edit</h1>
+<div class="card shadow-sm rounded-4">
+    <div class="card-header py-3">
+        <h5 class="fw-bold m-0">
+            <i class="bi bi-pencil-fill me-2"></i> Editar Lote
+        </h5>
+    </div>
 
-<h4>Lote</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    <div class="card-body">
+
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="LoteId" />
-            <div class="form-group">
-                <label asp-for="IngresoId" class="control-label"></label>
-                <select asp-for="IngresoId" class="form-control" asp-items="ViewBag.IngresoId"></select>
-                <span asp-validation-for="IngresoId" class="text-danger"></span>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label asp-for="IngresoId" class="form-label"></label>
+                    <select asp-for="IngresoId" class="form-select" asp-items="ViewBag.IngresoId"></select>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ProductoId" class="form-label"></label>
+                    <select asp-for="ProductoId" class="form-select" asp-items="ViewBag.ProductoId"></select>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="CodigoLote" class="form-label"></label>
+                    <input asp-for="CodigoLote" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="CantidadInicial" class="form-label"></label>
+                    <input asp-for="CantidadInicial" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="StockActual" class="form-label"></label>
+                    <input asp-for="StockActual" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="CostoUnitario" class="form-label"></label>
+                    <input asp-for="CostoUnitario" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="FechaProduccion" class="form-label"></label>
+                    <input asp-for="FechaProduccion" type="date" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="FechaVencimiento" class="form-label"></label>
+                    <input asp-for="FechaVencimiento" type="date" class="form-control" />
+                </div>
+
+                <div class="col-12 form-check mt-2">
+                    <input class="form-check-input" asp-for="Estado" />
+                    <label class="form-check-label" asp-for="Estado"></label>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="ProductoId" class="control-label"></label>
-                <select asp-for="ProductoId" class="form-control" asp-items="ViewBag.ProductoId"></select>
-                <span asp-validation-for="ProductoId" class="text-danger"></span>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    Volver
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Guardar Cambios
+                </button>
             </div>
-            <div class="form-group">
-                <label asp-for="CodigoLote" class="control-label"></label>
-                <input asp-for="CodigoLote" class="form-control" />
-                <span asp-validation-for="CodigoLote" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CantidadInicial" class="control-label"></label>
-                <input asp-for="CantidadInicial" class="form-control" />
-                <span asp-validation-for="CantidadInicial" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StockActual" class="control-label"></label>
-                <input asp-for="StockActual" class="form-control" />
-                <span asp-validation-for="StockActual" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CostoUnitario" class="control-label"></label>
-                <input asp-for="CostoUnitario" class="form-control" />
-                <span asp-validation-for="CostoUnitario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaProduccion" class="control-label"></label>
-                <input asp-for="FechaProduccion" class="form-control" />
-                <span asp-validation-for="FechaProduccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaVencimiento" class="control-label"></label>
-                <input asp-for="FechaVencimiento" class="form-control" />
-                <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+
         </form>
+
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

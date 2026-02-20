@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SysPescaderiaSaavedra.Web.Models;
@@ -18,200 +14,137 @@ namespace SysPescaderiaSaavedra.Web.Controllers
             _context = context;
         }
 
-        // GET: Lotes
+        // ============================
+        // INDEX
+        // ============================
         public async Task<IActionResult> Index()
         {
-            var pescaderiaContext = _context.Lotes.Include(l => l.Ingreso).Include(l => l.Producto);
-            return View(await pescaderiaContext.ToListAsync());
-        }
-
-        // GET: Lotes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var lote = await _context.Lotes
-                .Include(l => l.Ingreso)
+            var lotes = await _context.Lotes
                 .Include(l => l.Producto)
-                .FirstOrDefaultAsync(m => m.LoteId == id);
-            if (lote == null)
-            {
-                return NotFound();
-            }
+                .Include(l => l.Ingreso)
+                .OrderByDescending(l => l.LoteId)
+                .ToListAsync();
 
-            return View(lote);
+            return View(lotes);
         }
 
-        // GET: Lotes/Create
+        // ============================
+        // CREATE
+        // ============================
         public IActionResult Create()
         {
-            ViewData["IngresoId"] = new SelectList(_context.IngresoMercaderia, "IngresoId", "IngresoId");
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "ProductoId");
+            CargarCombos();
             return View();
         }
 
-        // POST: Lotes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IngresoId,ProductoId,CantidadInicial,CostoUnitario,FechaProduccion,FechaVencimiento")] Lote lote)
+        public async Task<IActionResult> Create(Lote lote)
         {
-            // --- 1. AJUSTE DE FECHAS (DateOnly vs DateTime) ---
-            // Obtenemos la fecha de hoy sin la hora, para poder comparar con tus campos DateOnly
-            DateOnly fechaHoy = DateOnly.FromDateTime(DateTime.Now);
+            DateOnly hoy = DateOnly.FromDateTime(DateTime.Now);
 
-            // Validación A: Fecha Vencimiento vs Fecha Producción
-            // (Solo validamos si FechaProduccion tiene valor, ya que es nullable en tu modelo)
-            if (lote.FechaProduccion.HasValue && lote.FechaVencimiento <= lote.FechaProduccion.Value)
-            {
-                ModelState.AddModelError("FechaVencimiento", "La fecha de vencimiento debe ser posterior a la producción.");
-            }
-
-            // Validación B: No permitir registrar lotes ya vencidos hoy
-            if (lote.FechaVencimiento < fechaHoy)
-            {
-                ModelState.AddModelError("FechaVencimiento", "No puedes registrar un lote que ya está vencido.");
-            }
-
-            // Validación C: Cantidad positiva
             if (lote.CantidadInicial <= 0)
-            {
-                ModelState.AddModelError("CantidadInicial", "La cantidad inicial debe ser mayor a 0.");
-            }
+                ModelState.AddModelError("CantidadInicial", "La cantidad debe ser mayor a 0.");
+
+            if (lote.FechaProduccion.HasValue && lote.FechaVencimiento <= lote.FechaProduccion)
+                ModelState.AddModelError("FechaVencimiento", "La fecha de vencimiento debe ser posterior a producción.");
+
+            if (lote.FechaVencimiento < hoy)
+                ModelState.AddModelError("FechaVencimiento", "No puedes registrar un lote vencido.");
 
             if (ModelState.IsValid)
             {
-                // --- 2. LOGICA AUTOMÁTICA ---
-
-                lote.Estado = true;
                 lote.StockActual = lote.CantidadInicial;
+                lote.Estado = true;
 
-                // Generamos Código: AÑO-MES-DIA - ID_PROD - HORA
-                // Nota: DateTime.Now se usa aquí solo para texto, eso sí está permitido
                 lote.CodigoLote = $"{DateTime.Now:yyyyMMdd}-{lote.ProductoId}-{DateTime.Now:HHmm}";
 
-                // --- 3. ACTUALIZAR STOCK (SOLUCIÓN AL ERROR DEL DECIMAL) ---
                 var producto = await _context.Productos.FindAsync(lote.ProductoId);
-
                 if (producto != null)
                 {
-                    // CORRECCIÓN: Como StockGlobal no acepta nulos, sumamos directamente.
                     producto.StockGlobal += lote.CantidadInicial;
-
                     _context.Productos.Update(producto);
                 }
 
-                // --- 4. GUARDAR ---
-                _context.Add(lote);
+                _context.Lotes.Add(lote);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            // Recargar listas si falla
-            ViewData["IngresoId"] = new SelectList(_context.IngresoMercaderia, "IngresoId", "IngresoId", lote.IngresoId);
-            // Nota: Agregué .Where(p => p.Estado == true) para que solo salgan productos activos
-            ViewData["ProductoId"] = new SelectList(_context.Productos.Where(p => p.Estado == true), "ProductoId", "Nombre", lote.ProductoId);
-
+            CargarCombos(lote);
             return View(lote);
         }
 
-        // GET: Lotes/Edit/5
+        // ============================
+        // EDIT
+        // ============================
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var lote = await _context.Lotes.FindAsync(id);
-            if (lote == null)
-            {
-                return NotFound();
-            }
-            ViewData["IngresoId"] = new SelectList(_context.IngresoMercaderia, "IngresoId", "IngresoId", lote.IngresoId);
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "ProductoId", lote.ProductoId);
+            if (lote == null) return NotFound();
+
+            CargarCombos(lote);
             return View(lote);
         }
 
-        // POST: Lotes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LoteId,IngresoId,ProductoId,CodigoLote,CantidadInicial,StockActual,CostoUnitario,FechaProduccion,FechaVencimiento,Estado")] Lote lote)
+        public async Task<IActionResult> Edit(int id, Lote lote)
         {
-            if (id != lote.LoteId)
-            {
-                return NotFound();
-            }
+            if (id != lote.LoteId) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(lote);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LoteExists(lote.LoteId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(lote);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IngresoId"] = new SelectList(_context.IngresoMercaderia, "IngresoId", "IngresoId", lote.IngresoId);
-            ViewData["ProductoId"] = new SelectList(_context.Productos, "ProductoId", "ProductoId", lote.ProductoId);
+
+            CargarCombos(lote);
             return View(lote);
         }
 
-        // GET: Lotes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var lote = await _context.Lotes
-                .Include(l => l.Ingreso)
-                .Include(l => l.Producto)
-                .FirstOrDefaultAsync(m => m.LoteId == id);
-            if (lote == null)
-            {
-                return NotFound();
-            }
-
-            return View(lote);
-        }
-
-        // POST: Lotes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        // ============================
+        // CAMBIAR ESTADO
+        // ============================
+        public async Task<IActionResult> CambiarEstado(int id)
         {
             var lote = await _context.Lotes.FindAsync(id);
-            if (lote != null)
-            {
-                _context.Lotes.Remove(lote);
-            }
+            if (lote == null) return NotFound();
+
+            lote.Estado = !lote.Estado;
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LoteExists(int id)
+        // ============================
+        // MÉTODO PRIVADO PARA COMBOS
+        // ============================
+        private void CargarCombos(Lote? lote = null)
         {
-            return _context.Lotes.Any(e => e.LoteId == id);
+            ViewData["ProductoId"] = new SelectList(
+                _context.Productos.Where(p => p.Estado == true),
+                "ProductoId",
+                "Nombre",
+                lote?.ProductoId
+            );
+
+            ViewData["IngresoId"] = new SelectList(
+                _context.IngresoMercaderia
+                    .Select(i => new
+                    {
+                        i.IngresoId,
+                        Descripcion = "Ingreso #" + i.IngresoId
+                                      + " - "
+                                      + i.FechaIngreso.ToString("dd/MM/yyyy")
+                    }),
+                "IngresoId",
+                "Descripcion",
+                lote?.IngresoId
+            );
         }
     }
 }
