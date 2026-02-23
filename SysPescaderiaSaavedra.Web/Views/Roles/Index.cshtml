@@ -8,170 +8,138 @@
     :root {
         --deep-sea: #002b44;
         --ocean-blue: #005a8d;
-        --caribbean-blue: #00a8e8;
-        --sea-foam: #e1f5fe;
-        --coral-red: #ff6b6b;
-        --sand: #fdf5e6;
-        --success-green: #28a745;
+        --success-green: #198754;
         --danger-red: #dc3545;
+        --border-color: #dee2e6;
+        --text-muted: #6c757d;
     }
 
     body {
-        background-color: #f0f4f8;
+        background-color: #f8f9fa;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .main-container {
         background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        border-top: 5px solid var(--ocean-blue);
-        margin-top: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: 1px solid var(--border-color);
+        margin: 20px;
     }
 
+    /* Cabecera estilo Pescadería */
     .header-section {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 25px;
-        border-bottom: 2px solid var(--sea-foam);
-        padding-bottom: 15px;
+        margin-bottom: 20px;
     }
 
-    h1 {
-        color: var(--deep-sea);
-        font-weight: 700;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+        .header-section h1 {
+            font-size: 1.5rem;
+            color: var(--deep-sea);
+            font-weight: 700;
+            margin: 0;
+        }
 
     .btn-new {
-        background: linear-gradient(135deg, var(--caribbean-blue), var(--ocean-blue));
-        color: white !important;
-        padding: 10px 20px;
-        border-radius: 50px;
+        background-color: transparent;
+        color: var(--success-green) !important;
+        border: 1px solid var(--success-green);
+        padding: 6px 15px;
+        border-radius: 6px;
         text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 168, 232, 0.3);
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.3s;
     }
 
         .btn-new:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 168, 232, 0.4);
-            filter: brightness(1.1);
+            background-color: var(--success-green);
+            color: white !important;
         }
 
-    .custom-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 10px;
+    /* Buscador */
+    .search-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
     }
 
-        .custom-table thead tr {
-            background-color: var(--ocean-blue);
-            color: white;
-        }
-
-        .custom-table th {
-            padding: 15px;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-        }
-
-            .custom-table th:first-child {
-                border-radius: 10px 0 0 10px;
-            }
-
-            .custom-table th:last-child {
-                border-radius: 0 10px 10px 0;
-            }
-
-        .custom-table tbody tr {
-            background-color: white;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-            .custom-table tbody tr:hover {
-                background-color: var(--sea-foam);
-            }
-
-        .custom-table td {
-            padding: 15px;
-            vertical-align: middle;
-            color: #444;
-            border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-        }
-
-    .status-badge {
+    .search-input {
+        flex-grow: 1;
+        border: 1px solid var(--border-color);
         padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: bold;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        text-transform: uppercase;
+        border-radius: 4px;
+        color: var(--text-muted);
+    }
+
+    /* Tabla */
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .custom-table thead th {
+            background-color: #f8f9fa;
+            color: var(--ocean-blue);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 12px;
+            border-bottom: 2px solid var(--ocean-blue);
+            text-align: left;
+        }
+
+        .custom-table tbody td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        .custom-table tbody tr:hover {
+            background-color: #f1f8ff;
+        }
+
+    /* Badge de Estado */
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
     }
 
     .status-active {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
+        background-color: #e6fcf5;
+        color: #0ca678;
     }
 
     .status-inactive {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
+        background-color: #fff5f5;
+        color: #fa5252;
     }
 
-    .action-link {
+    /* Botón Rojo Outline con icono de interruptor */
+    .btn-action-details-toggle {
+        border: 1px solid var(--danger-red);
+        background: white;
+        color: var(--danger-red);
+        padding: 5px 10px;
+        border-radius: 4px;
         text-decoration: none;
-        padding: 8px;
-        border-radius: 8px;
-        font-size: 1.1rem;
         transition: 0.2s;
         display: inline-block;
+        font-size: 1.1rem;
     }
 
-    /* Estilo para botones bloqueados/inactivos */
-    .disabled-action {
-        color: #bdc3c7 !important; /* Gris claro */
-        cursor: not-allowed;
-        pointer-events: none; /* Evita que se haga click */
-        filter: grayscale(1);
-        opacity: 0.6;
-    }
-
-    .edit {
-        color: var(--ocean-blue);
-    }
-
-        .edit:hover {
-            background: var(--sea-foam);
-        }
-
-    .details {
-        color: #666;
-    }
-
-        .details:hover {
-            background: #eee;
-        }
-
-    .delete {
-        color: var(--coral-red);
-    }
-
-        .delete:hover {
-            background: #ffeaea;
+        .btn-action-details-toggle:hover {
+            background-color: var(--danger-red);
+            color: white !important;
         }
 </style>
 
@@ -179,61 +147,55 @@
 
 <div class="main-container">
     <div class="header-section">
-        <h1><i class="fas fa-anchor"></i> Gestión de Roles</h1>
+        <h1><i class="fas fa-id-card-alt"></i> Gestión de Roles</h1>
         <a asp-action="Create" class="btn-new">
-            <i class="fas fa-plus-circle"></i> Agregar Nuevo Rol
+            <i class="far fa-plus-square"></i> Nuevo Rol
         </a>
     </div>
 
-    <table class="custom-table">
+    <div class="search-container">
+        <i class="fas fa-search" style="color: #adb5bd; align-self: center;"></i>
+        @* Agregado ID al input para el Script *@
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar rol...">
+        <button id="btnClear" class="btn btn-outline-secondary btn-sm" style="border-radius: 4px;">Limpiar</button>
+    </div>
+
+    <table class="custom-table" id="rolesTable">
         <thead>
             <tr>
-                <th><i class="fas fa-tag"></i> @Html.DisplayNameFor(model => model.Nombre)</th>
-                <th><i class="fas fa-align-left"></i> @Html.DisplayNameFor(model => model.Descripcion)</th>
-                <th><i class="fas fa-info-circle"></i> @Html.DisplayNameFor(model => model.Estado)</th>
-                <th><i class="fas fa-calendar-alt"></i> @Html.DisplayNameFor(model => model.FechaRegistro)</th>
-                <th style="text-align: center;">Acciones</th>
+                <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+                <th style="text-align: center;">@Html.DisplayNameFor(model => model.Estado)</th>
+                <th>FECHA REGISTRO</th>
+                <th style="text-align: center;">ACCIONES</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td style="font-weight: bold; color: var(--deep-sea);">
+                    <td style="font-weight: 500; color: var(--deep-sea);">
                         @Html.DisplayFor(modelItem => item.Nombre)
                     </td>
-                    <td>
+                    <td class="text-muted">
                         @Html.DisplayFor(modelItem => item.Descripcion)
                     </td>
-                    <td>
+                    <td style="text-align: center;">
                         @{
-                            var estadoValor = item.Estado.ToString().ToLower();
-                            var esActivo = estadoValor == "activo" || estadoValor == "true" || estadoValor == "1";
-                            var claseClima = esActivo ? "status-active" : "status-inactive";
-                            var iconoClima = esActivo ? "fa-check-circle" : "fa-times-circle";
+                            var esActivo = item.Estado.ToString().ToLower() == "activo" || item.Estado.ToString().ToLower() == "true";
+                            var claseBadge = esActivo ? "status-active" : "status-inactive";
+                            var iconoToggle = esActivo ? "fa-toggle-on" : "fa-toggle-off";
                         }
-                        <span class="status-badge @claseClima">
-                            <i class="fas @iconoClima"></i>
-                            @Html.DisplayFor(modelItem => item.Estado)
+                        <span class="status-badge @claseBadge">
+                            @(esActivo ? "Activo" : "Inactivo")
                         </span>
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FechaRegistro)
+                    <td style="color: #666;">
+                        @item.FechaRegistro.ToString("dd/MM/yyyy")
                     </td>
                     <td style="text-align: center;">
-                        @* Botón Editar Bloqueado *@
-                        <a class="action-link disabled-action" title="Editar (Bloqueado)">
-                            <i class="fas fa-edit"></i>
-                        </a>
-
-                        @* Botón Detalles (Sigue activo para poder ver la info) *@
-                        <a asp-action="Details" asp-route-id="@item.RolId" class="action-link details" title="Ver Detalles">
-                            <i class="fas fa-eye"></i>
-                        </a>
-
-                        @* Botón Eliminar Bloqueado *@
-                        <a class="action-link disabled-action" title="Eliminar (Bloqueado)">
-                            <i class="fas fa-trash-alt"></i>
+                        <a asp-action="Edit" asp-route-id="@item.RolId" class="btn-action-details-toggle" title="Ver Detalles / Cambiar Estado">
+                            <i class="fas @iconoToggle"></i>
                         </a>
                     </td>
                 </tr>
@@ -241,3 +203,36 @@
         </tbody>
     </table>
 </div>
+
+@* SCRIPT PARA BÚSQUEDA EN TIEMPO REAL *@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+        const btnClear = document.getElementById("btnClear");
+        const tableRows = document.querySelectorAll("#rolesTable tbody tr");
+
+        // Función de filtrado
+        searchInput.addEventListener("keyup", function () {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            tableRows.forEach(row => {
+                // Busca en las columnas Nombre (0) y Descripción (1)
+                const nombre = row.cells[0].textContent.toLowerCase();
+                const descripcion = row.cells[1].textContent.toLowerCase();
+
+                if (nombre.includes(searchTerm) || descripcion.includes(searchTerm)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+
+        // Botón Limpiar
+        btnClear.addEventListener("click", function () {
+            searchInput.value = "";
+            tableRows.forEach(row => row.style.display = "");
+            searchInput.focus();
+        });
+    });
+</script>

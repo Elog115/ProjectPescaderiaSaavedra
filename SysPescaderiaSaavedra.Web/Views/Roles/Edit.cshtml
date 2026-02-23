@@ -26,7 +26,7 @@
         border-radius: 20px;
         box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         overflow: hidden;
-        border-top: 6px solid var(--edit-gold); /* Color diferente para distinguir "Edición" */
+        border-top: 6px solid var(--edit-gold);
     }
 
     .form-header {
@@ -88,7 +88,6 @@
         z-index: 5;
     }
 
-    /* Estilo para el Checkbox de Estado */
     .status-switch {
         display: flex;
         align-items: center;
@@ -157,7 +156,7 @@
 
 <div class="form-container">
     <div class="form-header">
-        <h1><i class="fas fa-edit"></i> Editar Rol</h1>
+        <h1><i class="fas fa-edit"></i> Editar Estado Actual</h1>
         <p class="text-muted" style="margin-top: 5px; font-size: 0.9rem;">Actualice la información del sistema</p>
     </div>
 
@@ -169,14 +168,16 @@
             <div class="form-group">
                 <label asp-for="Nombre"></label>
                 <i class="fas fa-tag input-icon"></i>
-                <input asp-for="Nombre" class="form-control-custom" placeholder="Nombre del rol" />
+                @* Campo bloqueado con readonly *@
+                <input asp-for="Nombre" class="form-control-custom readonly-field" placeholder="Nombre del rol" readonly />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Descripcion"></label>
                 <i class="fas fa-align-left input-icon"></i>
-                <input asp-for="Descripcion" class="form-control-custom" placeholder="Descripción detallada" />
+                @* Campo bloqueado con readonly *@
+                <input asp-for="Descripcion" class="form-control-custom readonly-field" placeholder="Descripción detallada" readonly />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
 
