@@ -1,53 +1,233 @@
 ﻿@model IEnumerable<SysPescaderiaSaavedra.Web.Models.Roles>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gestión de Roles - Pescadería Saavedra";
 }
 
-<h1>Index</h1>
+<style>
+    :root {
+        --deep-sea: #002b44;
+        --ocean-blue: #005a8d;
+        --caribbean-blue: #00a8e8;
+        --sea-foam: #e1f5fe;
+        --coral-red: #ff6b6b;
+        --sand: #fdf5e6;
+        /* Nuevos colores para estados */
+        --success-green: #28a745;
+        --danger-red: #dc3545;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaRegistro)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaRegistro)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RolId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RolId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RolId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    body {
+        background-color: #f0f4f8;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .main-container {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        border-top: 5px solid var(--ocean-blue);
+        margin-top: 20px;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        border-bottom: 2px solid var(--sea-foam);
+        padding-bottom: 15px;
+    }
+
+    h1 {
+        color: var(--deep-sea);
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-new {
+        background: linear-gradient(135deg, var(--caribbean-blue), var(--ocean-blue));
+        color: white !important;
+        padding: 10px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 168, 232, 0.3);
+    }
+
+        .btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 168, 232, 0.4);
+            filter: brightness(1.1);
+        }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+        .custom-table thead tr {
+            background-color: var(--ocean-blue);
+            color: white;
+        }
+
+        .custom-table th {
+            padding: 15px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+            .custom-table th:first-child {
+                border-radius: 10px 0 0 10px;
+            }
+
+            .custom-table th:last-child {
+                border-radius: 0 10px 10px 0;
+            }
+
+        .custom-table tbody tr {
+            background-color: white;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+            .custom-table tbody tr:hover {
+                transform: scale(1.01);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                background-color: var(--sea-foam);
+            }
+
+        .custom-table td {
+            padding: 15px;
+            vertical-align: middle;
+            color: #444;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+    /* Estilos mejorados para las etiquetas de estado */
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        text-transform: uppercase;
+    }
+
+    .status-active {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .status-inactive {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .action-link {
+        text-decoration: none;
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        transition: 0.2s;
+    }
+
+    .edit {
+        color: var(--ocean-blue);
+    }
+
+        .edit:hover {
+            background: var(--sea-foam);
+        }
+
+    .details {
+        color: #666;
+    }
+
+        .details:hover {
+            background: #eee;
+        }
+
+    .delete {
+        color: var(--coral-red);
+    }
+
+        .delete:hover {
+            background: #ffeaea;
+        }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="main-container">
+    <div class="header-section">
+        <h1><i class="fas fa-anchor"></i> Gestión de Roles</h1>
+        <a asp-action="Create" class="btn-new">
+            <i class="fas fa-plus-circle"></i> Agregar Nuevo Rol
+        </a>
+    </div>
+
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th><i class="fas fa-tag"></i> @Html.DisplayNameFor(model => model.Nombre)</th>
+                <th><i class="fas fa-align-left"></i> @Html.DisplayNameFor(model => model.Descripcion)</th>
+                <th><i class="fas fa-info-circle"></i> @Html.DisplayNameFor(model => model.Estado)</th>
+                <th><i class="fas fa-calendar-alt"></i> @Html.DisplayNameFor(model => model.FechaRegistro)</th>
+                <th style="text-align: center;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="font-weight: bold; color: var(--deep-sea);">
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @* Lógica para definir la clase y el icono según el estado *@
+                        @{
+                            var estadoValor = item.Estado.ToString().ToLower();
+                            var esActivo = estadoValor == "activo" || estadoValor == "true" || estadoValor == "1";
+                            var claseClima = esActivo ? "status-active" : "status-inactive";
+                            var iconoClima = esActivo ? "fa-check-circle" : "fa-times-circle";
+                        }
+                        <span class="status-badge @claseClima">
+                            <i class="fas @iconoClima"></i>
+                            @Html.DisplayFor(modelItem => item.Estado)
+                        </span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaRegistro)
+                    </td>
+                    <td style="text-align: center;">
+                        <a asp-action="Edit" asp-route-id="@item.RolId" class="action-link edit" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.RolId" class="action-link details" title="Detalles">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.RolId" class="action-link delete" title="Eliminar">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

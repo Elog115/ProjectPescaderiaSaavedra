@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    /* Paleta de colores basada en la imagen original */
+    :root {
+        --deep-ocean: #003a5d;
+        --medium-ocean: #005a8d;
+        --accent-blue: #00a8e8;
+        --pure-white: #ffffff;
+        --input-gray: #f4f4f4;
+    }
+
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        /* Fondo degradado estático para evitar problemas de renderizado */
+        background: linear-gradient(180deg, #005a8d 0%, #002b44 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .login-card {
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px); /* Efecto de cristal esmerilado */
+        padding: 2.5rem;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 400px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        text-align: center;
+    }
+
+        .login-card h2 {
+            color: var(--pure-white);
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            font-size: 1.4rem;
+        }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Estilo para los inputs con bordes redondeados como la imagen */
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 20px 12px 45px;
+        border-radius: 25px;
+        border: none;
+        background-color: var(--pure-white);
+        box-sizing: border-box;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    /* Iconos posicionados dentro del input */
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--medium-ocean);
+        font-size: 1.2rem;
+    }
+
+    .btn-entrar {
+        width: 100%;
+        padding: 12px;
+        border-radius: 25px;
+        border: none;
+        background: linear-gradient(to right, #0094cc, #00c2ff);
+        color: white;
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        margin-top: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s;
+    }
+
+        .btn-entrar:hover {
+            opacity: 0.9;
+        }
+
+    .login-footer {
+        margin-top: 1.5rem;
+    }
+
+        .login-footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+            .login-footer a:hover {
+                color: var(--pure-white);
+                text-decoration: underline;
+            }
+
+    /* Decoración simple de peces estáticos (sin animaciones) */
+    .fish-decoration {
+        position: absolute;
+        opacity: 0.2;
+        color: white;
+        pointer-events: none;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="login-wrapper">
+    <i class="fas fa-fish fish-decoration" style="top: 10%; left: 10%; font-size: 3rem;"></i>
+    <i class="fas fa-fish fish-decoration" style="bottom: 15%; right: 12%; font-size: 4rem; transform: scaleX(-1);"></i>
+
+    <div class="login-card">
+        <h2>Inicio de Sesión Profesional</h2>
+
+        <form method="post">
+            <div class="form-group">
+                <i class="fas fa-fish input-icon"></i>
+                <input type="text" class="form-control-custom" placeholder="USUARIO" name="Username" required />
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" class="form-control-custom" placeholder="CONTRASEÑA" name="Password" required />
+            </div>
+
+            <button type="submit" class="btn-entrar">ENTRAR</button>
+        </form>
+
+        <div class="login-footer">
+            <a href="#">Olvidé mi contraseña</a>
+            <a href="#">Registrarse como nuevo usuario</a>
+        </div>
+    </div>
+</div>
