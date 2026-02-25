@@ -1,58 +1,93 @@
 ﻿@model SysPescaderiaSaavedra.Web.Models.Proveedores
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nuevo Proveedor";
 }
 
-<h1>Create</h1>
+<div class="card shadow-sm rounded-4">
 
-<h4>Proveedores</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    <!-- HEADER -->
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h5 class="m-0 fw-bold text-ocean">
+            <i class="bi bi-truck me-2"></i> Registrar Nuevo Proveedor
+        </h5>
+
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <div class="card-body">
+
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NombreEmpresa" class="control-label"></label>
-                <input asp-for="NombreEmpresa" class="form-control" />
-                <span asp-validation-for="NombreEmpresa" class="text-danger"></span>
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="row g-3">
+
+                <!-- Empresa -->
+                <div class="col-md-6">
+                    <label asp-for="NombreEmpresa" class="form-label fw-semibold"></label>
+                    <input asp-for="NombreEmpresa" class="form-control" placeholder="Nombre de la empresa" />
+                    <span asp-validation-for="NombreEmpresa" class="text-danger small"></span>
+                </div>
+
+                <!-- Contacto -->
+                <div class="col-md-6">
+                    <label asp-for="Contacto" class="form-label fw-semibold"></label>
+                    <input asp-for="Contacto" class="form-control" placeholder="Nombre del contacto" />
+                    <span asp-validation-for="Contacto" class="text-danger small"></span>
+                </div>
+
+                <!-- Teléfono -->
+                <div class="col-md-6">
+                    <label asp-for="Telefono" class="form-label fw-semibold"></label>
+                    <input asp-for="Telefono" class="form-control" placeholder="Número telefónico" />
+                    <span asp-validation-for="Telefono" class="text-danger small"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label fw-semibold"></label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="correo@ejemplo.com" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <!-- Dirección -->
+                <div class="col-md-8">
+                    <label asp-for="Direccion" class="form-label fw-semibold"></label>
+                    <input asp-for="Direccion" class="form-control" placeholder="Dirección del proveedor" />
+                    <span asp-validation-for="Direccion" class="text-danger small"></span>
+                </div>
+
+                <!-- NIT -->
+                <div class="col-md-4">
+                    <label asp-for="Nit" class="form-label fw-semibold"></label>
+                    <input asp-for="Nit" class="form-control" placeholder="Número de identificación tributaria" />
+                    <span asp-validation-for="Nit" class="text-danger small"></span>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Contacto" class="control-label"></label>
-                <input asp-for="Contacto" class="form-control" />
-                <span asp-validation-for="Contacto" class="text-danger"></span>
+
+            <!-- BOTONES -->
+            <div class="mt-4 d-flex justify-content-end gap-2">
+
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Guardar Proveedor
+                </button>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Direccion" class="control-label"></label>
-                <input asp-for="Direccion" class="form-control" />
-                <span asp-validation-for="Direccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Nit" class="control-label"></label>
-                <input asp-for="Nit" class="form-control" />
-                <span asp-validation-for="Nit" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

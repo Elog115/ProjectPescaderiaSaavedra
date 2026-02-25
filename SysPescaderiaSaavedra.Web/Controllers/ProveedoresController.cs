@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SysPescaderiaSaavedra.Web.Models;
 
@@ -18,133 +17,148 @@ namespace SysPescaderiaSaavedra.Web.Controllers
             _context = context;
         }
 
-        // GET: Proveedores
+        // ===========================
+        // INDEX (Activos e Inactivos)
+        // ===========================
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Proveedores.ToListAsync());
-        }
-
-        // GET: Proveedores/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var proveedores = await _context.Proveedores
-                .FirstOrDefaultAsync(m => m.ProveedorId == id);
-            if (proveedores == null)
-            {
-                return NotFound();
-            }
+                .OrderByDescending(p => p.FechaRegistro)
+                .ToListAsync();
 
             return View(proveedores);
         }
 
-        // GET: Proveedores/Create
+        // ===========================
+        // DETAILS
+        // ===========================
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var proveedor = await _context.Proveedores
+                .FirstOrDefaultAsync(m => m.ProveedorId == id);
+
+            if (proveedor == null) return NotFound();
+
+            return View(proveedor);
+        }
+
+        // ===========================
+        // CREATE
+        // ===========================
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Proveedores/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProveedorId,NombreEmpresa,Contacto,Telefono,Email,Direccion,Nit,Estado,FechaRegistro")] Proveedores proveedores)
+        public async Task<IActionResult> Create(Proveedores proveedor)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(proveedores);
+                proveedor.Estado = true; // Siempre inicia activo
+                proveedor.FechaRegistro = DateTime.Now;
+
+                _context.Add(proveedor);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(proveedores);
+
+            return View(proveedor);
         }
 
-        // GET: Proveedores/Edit/5
+        // ===========================
+        // EDIT
+        // ===========================
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var proveedores = await _context.Proveedores.FindAsync(id);
-            if (proveedores == null)
-            {
-                return NotFound();
-            }
-            return View(proveedores);
+            var proveedor = await _context.Proveedores.FindAsync(id);
+
+            if (proveedor == null) return NotFound();
+
+            return View(proveedor);
         }
 
-        // POST: Proveedores/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProveedorId,NombreEmpresa,Contacto,Telefono,Email,Direccion,Nit,Estado,FechaRegistro")] Proveedores proveedores)
+        public async Task<IActionResult> Edit(int id, Proveedores proveedor)
         {
-            if (id != proveedores.ProveedorId)
-            {
+            if (id != proveedor.ProveedorId)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(proveedores);
+                    _context.Update(proveedor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProveedoresExists(proveedores.ProveedorId))
-                    {
+                    if (!ProveedoresExists(proveedor.ProveedorId))
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(proveedores);
+
+            return View(proveedor);
         }
 
-        // GET: Proveedores/Delete/5
+        // ===========================
+        // TOGGLE ESTADO (Activar/Desactivar)
+        // ===========================
+        public async Task<IActionResult> ToggleEstado(int id)
+        {
+            var proveedor = await _context.Proveedores.FindAsync(id);
+
+            if (proveedor == null)
+                return NotFound();
+
+            proveedor.Estado = !proveedor.Estado;
+
+            _context.Update(proveedor);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // ===========================
+        // DELETE LOGICO (Opcional)
+        // ===========================
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var proveedores = await _context.Proveedores
+            var proveedor = await _context.Proveedores
                 .FirstOrDefaultAsync(m => m.ProveedorId == id);
-            if (proveedores == null)
-            {
-                return NotFound();
-            }
 
-            return View(proveedores);
+            if (proveedor == null) return NotFound();
+
+            return View(proveedor);
         }
 
-        // POST: Proveedores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var proveedores = await _context.Proveedores.FindAsync(id);
-            if (proveedores != null)
+            var proveedor = await _context.Proveedores.FindAsync(id);
+
+            if (proveedor != null)
             {
-                _context.Proveedores.Remove(proveedores);
+                // Eliminación lógica
+                proveedor.Estado = false;
+                _context.Update(proveedor);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

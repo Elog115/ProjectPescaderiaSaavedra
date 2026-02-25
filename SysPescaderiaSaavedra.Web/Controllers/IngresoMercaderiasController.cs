@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -18,149 +17,174 @@ namespace SysPescaderiaSaavedra.Web.Controllers
             _context = context;
         }
 
-        // GET: IngresoMercaderias
+        // ============================
+        // INDEX
+        // ============================
         public async Task<IActionResult> Index()
         {
-            var pescaderiaContext = _context.IngresoMercaderia.Include(i => i.Proveedor).Include(i => i.Usuario);
-            return View(await pescaderiaContext.ToListAsync());
+            var ingresos = _context.IngresoMercaderia
+                .Include(i => i.Proveedor)
+                .Include(i => i.Usuario);
+
+            return View(await ingresos.ToListAsync());
         }
 
-        // GET: IngresoMercaderias/Details/5
+        // ============================
+        // DETAILS
+        // ============================
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var ingresoMercaderia = await _context.IngresoMercaderia
+            var ingreso = await _context.IngresoMercaderia
                 .Include(i => i.Proveedor)
                 .Include(i => i.Usuario)
                 .FirstOrDefaultAsync(m => m.IngresoId == id);
-            if (ingresoMercaderia == null)
-            {
-                return NotFound();
-            }
 
-            return View(ingresoMercaderia);
+            if (ingreso == null) return NotFound();
+
+            return View(ingreso);
         }
 
-        // GET: IngresoMercaderias/Create
+        // ============================
+        // CREATE GET
+        // ============================
         public IActionResult Create()
         {
-            ViewData["ProveedorId"] = new SelectList(_context.Proveedores, "ProveedorId", "ProveedorId");
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId");
+            ViewData["ProveedorId"] = new SelectList(
+                _context.Proveedores.Where(p => p.Estado),
+                "ProveedorId",
+                "NombreEmpresa");
+
+            ViewData["UsuarioId"] = new SelectList(
+                _context.Usuarios,
+                "UsuarioId",
+                "NombreCompleto");
+
             return View();
         }
 
-        // POST: IngresoMercaderias/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // ============================
+        // CREATE POST
+        // ============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IngresoId,ProveedorId,UsuarioId,FechaIngreso,TotalCompra")] IngresoMercaderia ingresoMercaderia)
+        public async Task<IActionResult> Create([Bind("IngresoId,ProveedorId,UsuarioId,FechaIngreso,TotalCompra,Estado")] IngresoMercaderia ingreso)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ingresoMercaderia);
+                //////////ingreso.Estado = true;
+                ingreso.FechaIngreso = DateTime.Now;
+
+                _context.Add(ingreso);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProveedorId"] = new SelectList(_context.Proveedores, "ProveedorId", "ProveedorId", ingresoMercaderia.ProveedorId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId", ingresoMercaderia.UsuarioId);
-            return View(ingresoMercaderia);
+
+            ViewData["ProveedorId"] = new SelectList(
+                _context.Proveedores.Where(p => p.Estado),
+                "ProveedorId",
+                "NombreEmpresa",
+                ingreso.ProveedorId);
+
+            ViewData["UsuarioId"] = new SelectList(
+                _context.Usuarios,
+                "UsuarioId",
+                "NombreCompleto",
+                ingreso.UsuarioId);
+
+            return View(ingreso);
         }
 
-        // GET: IngresoMercaderias/Edit/5
+        // ============================
+        // EDIT GET
+        // ============================
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var ingresoMercaderia = await _context.IngresoMercaderia.FindAsync(id);
-            if (ingresoMercaderia == null)
-            {
-                return NotFound();
-            }
-            ViewData["ProveedorId"] = new SelectList(_context.Proveedores, "ProveedorId", "ProveedorId", ingresoMercaderia.ProveedorId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId", ingresoMercaderia.UsuarioId);
-            return View(ingresoMercaderia);
+            var ingreso = await _context.IngresoMercaderia.FindAsync(id);
+            if (ingreso == null) return NotFound();
+
+            ViewData["ProveedorId"] = new SelectList(
+                _context.Proveedores,
+                "ProveedorId",
+                "NombreEmpresa",
+                ingreso.ProveedorId);
+
+            ViewData["UsuarioId"] = new SelectList(
+                _context.Usuarios,
+                "UsuarioId",
+                "NombreCompleto",
+                ingreso.UsuarioId);
+
+            return View(ingreso);
         }
 
-        // POST: IngresoMercaderias/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // ============================
+        // EDIT POST
+        // ============================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IngresoId,ProveedorId,UsuarioId,FechaIngreso,TotalCompra")] IngresoMercaderia ingresoMercaderia)
+        public async Task<IActionResult> Edit(int id, [Bind("IngresoId,ProveedorId,UsuarioId,FechaIngreso,TotalCompra,Estado")] IngresoMercaderia ingreso)
         {
-            if (id != ingresoMercaderia.IngresoId)
-            {
+            if (id != ingreso.IngresoId)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(ingresoMercaderia);
+                    _context.Update(ingreso);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!IngresoMercaderiaExists(ingresoMercaderia.IngresoId))
-                    {
+                    if (!IngresoMercaderiaExists(ingreso.IngresoId))
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProveedorId"] = new SelectList(_context.Proveedores, "ProveedorId", "ProveedorId", ingresoMercaderia.ProveedorId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId", ingresoMercaderia.UsuarioId);
-            return View(ingresoMercaderia);
+
+            ViewData["ProveedorId"] = new SelectList(
+                _context.Proveedores,
+                "ProveedorId",
+                "NombreEmpresa",
+                ingreso.ProveedorId);
+
+            ViewData["UsuarioId"] = new SelectList(
+                _context.Usuarios,
+                "UsuarioId",
+                "NombreCompleto",
+                ingreso.UsuarioId);
+
+            return View(ingreso);
         }
 
-        // GET: IngresoMercaderias/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // ============================
+        // TOGGLE ESTADO
+        // ============================
+        public async Task<IActionResult> ToggleEstado(int id)
         {
-            if (id == null)
-            {
+            var ingreso = await _context.IngresoMercaderia.FindAsync(id);
+
+            if (ingreso == null)
                 return NotFound();
-            }
 
-            var ingresoMercaderia = await _context.IngresoMercaderia
-                .Include(i => i.Proveedor)
-                .Include(i => i.Usuario)
-                .FirstOrDefaultAsync(m => m.IngresoId == id);
-            if (ingresoMercaderia == null)
-            {
-                return NotFound();
-            }
+          //////////// ingreso.Estado = !ingreso.Estado;
 
-            return View(ingresoMercaderia);
-        }
-
-        // POST: IngresoMercaderias/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var ingresoMercaderia = await _context.IngresoMercaderia.FindAsync(id);
-            if (ingresoMercaderia != null)
-            {
-                _context.IngresoMercaderia.Remove(ingresoMercaderia);
-            }
-
+            _context.Update(ingreso);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
+        // ============================
+        // VALIDACIÓN EXISTENCIA
+        // ============================
         private bool IngresoMercaderiaExists(int id)
         {
             return _context.IngresoMercaderia.Any(e => e.IngresoId == id);
