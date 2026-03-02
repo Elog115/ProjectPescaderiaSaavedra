@@ -1,0 +1,109 @@
+﻿@model SysPescaderiaSaavedra.Web.Models.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid py-4">
+
+    <h2 class="fw-bold mb-4">Dashboard</h2>
+
+    <!-- ===== KPIs ===== -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h6>Ventas del día</h6>
+                <h3 class="text-success">$@Model.VentasHoy.ToString("N2")</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h6>Ventas del mes</h6>
+                <h3 class="text-primary">$@Model.VentasMes.ToString("N2")</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h6>Facturas hoy</h6>
+                <h3>@Model.FacturasHoy</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h6>Clientes nuevos</h6>
+                <h3>@Model.ClientesNuevos</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h6>Stock bajo</h6>
+                <h3 class="text-danger">@Model.StockBajo</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h6>Ticket promedio</h6>
+                <h3 class="text-warning">$@Model.TicketPromedio.ToString("N2")</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== GRÁFICOS ===== -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm p-3">
+                <h5>Ventas últimos 7 días</h5>
+                <div id="ventasChart"></div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5>Top Productos</h5>
+                <div id="topProductosChart"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script>
+        var ventasData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.VentasSemana));
+        var topProductos = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopProductos));
+
+        // ===== Área Ventas =====
+        var ventasOptions = {
+            chart: { type: 'area', height: 350 },
+            series: [{
+                name: 'Ventas',
+                data: ventasData.map(x => x.Total)
+            }],
+            xaxis: {
+                categories: ventasData.map(x => x.Fecha)
+            },
+            stroke: { curve: 'smooth' }
+        };
+
+        new ApexCharts(document.querySelector("#ventasChart"), ventasOptions).render();
+
+        // ===== Donut Top Productos =====
+        var donutOptions = {
+            chart: { type: 'donut', height: 350 },
+            series: topProductos.map(x => x.Cantidad),
+            labels: topProductos.map(x => x.Producto),
+            legend: { position: 'bottom' }
+        };
+
+        new ApexCharts(document.querySelector("#topProductosChart"), donutOptions).render();
+    </script>
+}

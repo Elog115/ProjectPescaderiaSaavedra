@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -18,88 +17,79 @@ namespace SysPescaderiaSaavedra.Web.Controllers
             _context = context;
         }
 
+        // =========================
         // GET: Ventas
+        // =========================
         public async Task<IActionResult> Index()
         {
-            var pescaderiaContext = _context.Ventas.Include(v => v.Cliente).Include(v => v.Usuario);
-            return View(await pescaderiaContext.ToListAsync());
-        }
-
-        // GET: Ventas/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var venta = await _context.Ventas
+            var ventas = await _context.Ventas
                 .Include(v => v.Cliente)
                 .Include(v => v.Usuario)
-                .FirstOrDefaultAsync(m => m.VentaId == id);
-            if (venta == null)
-            {
-                return NotFound();
-            }
+                .ToListAsync();
 
-            return View(venta);
+            return View(ventas);
         }
 
+        // =========================
         // GET: Ventas/Create
+        // =========================
         public IActionResult Create()
         {
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "ClienteId");
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId");
-            return View();
+            CargarCombos();
+            return View(new Venta());
         }
 
+        // =========================
         // POST: Ventas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VentaId,ClienteId,UsuarioId,FechaVenta,Subtotal,Impuesto,Total,Estado")] Venta venta)
+        public async Task<IActionResult> Create(
+            [Bind("ClienteId,UsuarioId,Subtotal,Impuesto,Total")] Venta venta)
         {
             if (ModelState.IsValid)
             {
+                venta.FechaVenta = DateTime.Now;
+                venta.Estado = true;
+
                 _context.Add(venta);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "ClienteId", venta.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId", venta.UsuarioId);
+
+            CargarCombos(venta.ClienteId, venta.UsuarioId);
             return View(venta);
         }
 
-        // GET: Ventas/Edit/5
+        // =========================
+        // GET: Ventas/Edit
+        // =========================
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var venta = await _context.Ventas.FindAsync(id);
+
             if (venta == null)
-            {
                 return NotFound();
-            }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "ClienteId", venta.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId", venta.UsuarioId);
+
+            CargarCombos(venta.ClienteId, venta.UsuarioId);
             return View(venta);
         }
 
-        // POST: Ventas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // =========================
+        // POST: Ventas/Edit
+        // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VentaId,ClienteId,UsuarioId,FechaVenta,Subtotal,Impuesto,Total,Estado")] Venta venta)
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("VentaId,ClienteId,UsuarioId,FechaVenta,Subtotal,Impuesto,Total,Estado")] Venta venta)
         {
             if (id != venta.VentaId)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -111,56 +101,58 @@ namespace SysPescaderiaSaavedra.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!VentaExists(venta.VentaId))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "ClienteId", venta.ClienteId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "UsuarioId", "UsuarioId", venta.UsuarioId);
+
+            CargarCombos(venta.ClienteId, venta.UsuarioId);
             return View(venta);
         }
 
-        // GET: Ventas/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var venta = await _context.Ventas
-                .Include(v => v.Cliente)
-                .Include(v => v.Usuario)
-                .FirstOrDefaultAsync(m => m.VentaId == id);
-            if (venta == null)
-            {
-                return NotFound();
-            }
-
-            return View(venta);
-        }
-
-        // POST: Ventas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        // =========================
+        // TOGGLE ESTADO
+        // =========================
+        public async Task<IActionResult> ToggleEstado(int id)
         {
             var venta = await _context.Ventas.FindAsync(id);
-            if (venta != null)
-            {
-                _context.Ventas.Remove(venta);
-            }
+
+            if (venta == null)
+                return NotFound();
+
+            venta.Estado = !venta.Estado;
 
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
+        // =========================
+        // MÉTODO PARA CARGAR COMBOS
+        // =========================
+        private void CargarCombos(int? clienteId = null, int? usuarioId = null)
+        {
+            ViewData["ClienteId"] = new SelectList(
+                _context.Clientes,
+                "ClienteId",
+                "Nombre",
+                clienteId
+            );
+
+            ViewData["UsuarioId"] = new SelectList(
+                _context.Usuarios,
+                "UsuarioId",
+                "NombreCompleto", // 👈 CORRECTO
+                usuarioId
+            );
+        }
+
+        // =========================
+        // VALIDACIÓN
+        // =========================
         private bool VentaExists(int id)
         {
             return _context.Ventas.Any(e => e.VentaId == id);

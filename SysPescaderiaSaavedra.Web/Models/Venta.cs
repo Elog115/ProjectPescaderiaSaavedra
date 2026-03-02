@@ -19,11 +19,11 @@ public partial class Venta
 
     public decimal Total { get; set; }
 
-    public string Estado { get; set; } = null!;
+    public bool Estado { get; set; }
 
-    public virtual Cliente Cliente { get; set; } = null!;
+    public virtual Cliente? Cliente { get; set; }
 
     public virtual ICollection<DetalleVenta> DetalleVenta { get; set; } = new List<DetalleVenta>();
 
-    public virtual Usuario Usuario { get; set; } = null!;
+    public virtual Usuario? Usuario { get; set; }
 }

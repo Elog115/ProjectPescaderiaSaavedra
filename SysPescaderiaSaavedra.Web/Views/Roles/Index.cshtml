@@ -1,238 +1,185 @@
 ﻿@model IEnumerable<SysPescaderiaSaavedra.Web.Models.Roles>
 
 @{
-    ViewData["Title"] = "Gestión de Roles - Pescadería Saavedra";
+    ViewData["Title"] = "Gestión de Roles";
 }
 
 <style>
-    :root {
-        --deep-sea: #002b44;
-        --ocean-blue: #005a8d;
-        --success-green: #198754;
-        --danger-red: #dc3545;
-        --border-color: #dee2e6;
-        --text-muted: #6c757d;
+    .table-custom thead {
+        background-color: #f1f5f7;
     }
 
-    body {
-        background-color: #f8f9fa;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .main-container {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        border: 1px solid var(--border-color);
-        margin: 20px;
-    }
-
-    /* Cabecera estilo Pescadería */
-    .header-section {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-        .header-section h1 {
-            font-size: 1.5rem;
-            color: var(--deep-sea);
-            font-weight: 700;
-            margin: 0;
-        }
-
-    .btn-new {
-        background-color: transparent;
-        color: var(--success-green) !important;
-        border: 1px solid var(--success-green);
-        padding: 6px 15px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 0.9rem;
-        transition: all 0.3s;
-    }
-
-        .btn-new:hover {
-            background-color: var(--success-green);
-            color: white !important;
-        }
-
-    /* Buscador */
-    .search-container {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-        padding: 15px;
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-    }
-
-    .search-input {
-        flex-grow: 1;
-        border: 1px solid var(--border-color);
-        padding: 6px 12px;
-        border-radius: 4px;
-        color: var(--text-muted);
-    }
-
-    /* Tabla */
-    .custom-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-        .custom-table thead th {
-            background-color: #f8f9fa;
-            color: var(--ocean-blue);
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 12px;
-            border-bottom: 2px solid var(--ocean-blue);
-            text-align: left;
-        }
-
-        .custom-table tbody td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.9rem;
-            color: #444;
-        }
-
-        .custom-table tbody tr:hover {
-            background-color: #f1f8ff;
-        }
-
-    /* Badge de Estado */
-    .status-badge {
-        padding: 4px 12px;
-        border-radius: 15px;
-        font-size: 0.8rem;
+    .table-custom th {
         font-weight: 600;
+        color: #0b5e6f;
+        text-transform: uppercase;
+        font-size: 0.75rem;
     }
 
-    .status-active {
-        background-color: #e6fcf5;
-        color: #0ca678;
+    .table-custom tbody tr:hover {
+        background-color: rgba(29, 211, 176, 0.08);
     }
 
-    .status-inactive {
-        background-color: #fff5f5;
-        color: #fa5252;
+    .badge-estado {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+        letter-spacing: .4px;
     }
 
-    /* Botón Rojo Outline con icono de interruptor */
-    .btn-action-details-toggle {
-        border: 1px solid var(--danger-red);
-        background: white;
-        color: var(--danger-red);
-        padding: 5px 10px;
-        border-radius: 4px;
-        text-decoration: none;
-        transition: 0.2s;
-        display: inline-block;
-        font-size: 1.1rem;
+    .badge-activo {
+        background-color: #e6f9f3;
+        color: #0f7c8d;
     }
 
-        .btn-action-details-toggle:hover {
-            background-color: var(--danger-red);
-            color: white !important;
-        }
+    .badge-inactivo {
+        background-color: #fdecea;
+        color: #b42318;
+    }
+
+    .text-ocean {
+        color: #1dd3b0;
+    }
 </style>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<div class="card shadow-sm rounded-4">
 
-<div class="main-container">
-    <div class="header-section">
-        <h1><i class="fas fa-id-card-alt"></i> Gestión de Roles</h1>
-        <a asp-action="Create" class="btn-new">
-            <i class="far fa-plus-square"></i> Nuevo Rol
+    <!-- HEADER -->
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h5 class="m-0 fw-bold text-ocean">
+            <i class="bi bi-shield-lock-fill me-2"></i> Gestión de Roles
+        </h5>
+
+        <a asp-action="Create" class="btn btn-success btn-sm">
+            <i class="bi bi-plus-circle"></i> Nuevo Rol
         </a>
     </div>
 
-    <div class="search-container">
-        <i class="fas fa-search" style="color: #adb5bd; align-self: center;"></i>
-        @* Agregado ID al input para el Script *@
-        <input type="text" id="searchInput" class="search-input" placeholder="Buscar rol...">
-        <button id="btnClear" class="btn btn-outline-secondary btn-sm" style="border-radius: 4px;">Limpiar</button>
-    </div>
+    <div class="card-body">
 
-    <table class="custom-table" id="rolesTable">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.Nombre)</th>
-                <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
-                <th style="text-align: center;">@Html.DisplayNameFor(model => model.Estado)</th>
-                <th>FECHA REGISTRO</th>
-                <th style="text-align: center;">ACCIONES</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td style="font-weight: 500; color: var(--deep-sea);">
-                        @Html.DisplayFor(modelItem => item.Nombre)
-                    </td>
-                    <td class="text-muted">
-                        @Html.DisplayFor(modelItem => item.Descripcion)
-                    </td>
-                    <td style="text-align: center;">
-                        @{
-                            var esActivo = item.Estado.ToString().ToLower() == "activo" || item.Estado.ToString().ToLower() == "true";
-                            var claseBadge = esActivo ? "status-active" : "status-inactive";
-                            var iconoToggle = esActivo ? "fa-toggle-on" : "fa-toggle-off";
-                        }
-                        <span class="status-badge @claseBadge">
-                            @(esActivo ? "Activo" : "Inactivo")
-                        </span>
-                    </td>
-                    <td style="color: #666;">
-                        @item.FechaRegistro.ToString("dd/MM/yyyy")
-                    </td>
-                    <td style="text-align: center;">
-                        <a asp-action="Edit" asp-route-id="@item.RolId" class="btn-action-details-toggle" title="Ver Detalles / Cambiar Estado">
-                            <i class="fas @iconoToggle"></i>
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        <!-- BUSCADOR -->
+        <div class="mb-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input id="txtSearch" class="form-control"
+                       placeholder="Buscar rol..." />
+                <button class="btn btn-outline-secondary" id="btnClear">
+                    Limpiar
+                </button>
+            </div>
+        </div>
+
+        <!-- TABLA -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle table-custom">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Fecha registro</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaBody">
+                    @foreach (var r in Model)
+                    {
+                        <tr class="@(r.Estado ? "" : "opacity-75")">
+
+                            <td class="fw-semibold">
+                                @r.Nombre
+                            </td>
+
+                            <td class="text-muted">
+                                @r.Descripcion
+                            </td>
+
+                            <td class="text-center">
+                                @if (r.Estado)
+                                {
+                                    <span class="badge-estado badge-activo">
+                                        Activo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge-estado badge-inactivo">
+                                        Inactivo
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="text-center text-muted">
+                                @r.FechaRegistro.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td class="text-end text-nowrap">
+
+                                <a asp-action="Edit" asp-route-id="@r.RolId"
+                                   class="btn btn-sm btn-outline-primary"
+                                   title="Editar">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+
+                                <form asp-action="ToggleEstado"
+                                      asp-route-id="@r.RolId"
+                                      method="post"
+                                      style="display:inline;">
+                                    @Html.AntiForgeryToken()
+
+                                    @if (r.Estado)
+                                    {
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                title="Desactivar">
+                                            <i class="bi bi-toggle-off"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-success"
+                                                title="Activar">
+                                            <i class="bi bi-toggle-on"></i>
+                                        </button>
+                                    }
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 </div>
 
-@* SCRIPT PARA BÚSQUEDA EN TIEMPO REAL *@
+<!-- SCRIPT BUSCADOR -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.getElementById("searchInput");
-        const btnClear = document.getElementById("btnClear");
-        const tableRows = document.querySelectorAll("#rolesTable tbody tr");
+    document.getElementById("txtSearch").addEventListener("keyup", function () {
+        let filtro = this.value.toLowerCase();
+        let filas = document.querySelectorAll("#tablaBody tr");
 
-        // Función de filtrado
-        searchInput.addEventListener("keyup", function () {
-            const searchTerm = searchInput.value.toLowerCase();
+        filas.forEach(function (fila) {
+            let textoFila = fila.innerText.toLowerCase();
 
-            tableRows.forEach(row => {
-                // Busca en las columnas Nombre (0) y Descripción (1)
-                const nombre = row.cells[0].textContent.toLowerCase();
-                const descripcion = row.cells[1].textContent.toLowerCase();
-
-                if (nombre.includes(searchTerm) || descripcion.includes(searchTerm)) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-            });
+            if (textoFila.includes(filtro)) {
+                fila.style.display = "";
+            } else {
+                fila.style.display = "none";
+            }
         });
+    });
 
-        // Botón Limpiar
-        btnClear.addEventListener("click", function () {
-            searchInput.value = "";
-            tableRows.forEach(row => row.style.display = "");
-            searchInput.focus();
-        });
+    document.getElementById("btnClear").addEventListener("click", function () {
+        document.getElementById("txtSearch").value = "";
+        let filas = document.querySelectorAll("#tablaBody tr");
+        filas.forEach(fila => fila.style.display = "");
     });
 </script>

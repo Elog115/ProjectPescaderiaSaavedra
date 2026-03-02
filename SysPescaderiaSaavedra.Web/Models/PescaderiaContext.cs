@@ -140,25 +140,25 @@ public partial class PescaderiaContext : DbContext
             entity.ToTable("Ingreso_Mercaderia");
 
             entity.Property(e => e.IngresoId).HasColumnName("ingreso_id");
+
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
+
             entity.Property(e => e.FechaIngreso)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_ingreso");
+
             entity.Property(e => e.ProveedorId).HasColumnName("proveedor_id");
+
             entity.Property(e => e.TotalCompra)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("total_compra");
+
             entity.Property(e => e.UsuarioId).HasColumnName("usuario_id");
 
-            entity.HasOne(d => d.Proveedor).WithMany(p => p.IngresoMercaderia)
-                .HasForeignKey(d => d.ProveedorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Ingreso_M__prove__5BE2A6F2");
 
-            entity.HasOne(d => d.Usuario).WithMany(p => p.IngresoMercaderia)
-                .HasForeignKey(d => d.UsuarioId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Ingreso_M__usuar__5CD6CB2B");
         });
 
         modelBuilder.Entity<Lote>(entity =>
@@ -350,9 +350,8 @@ public partial class PescaderiaContext : DbContext
             entity.Property(e => e.VentaId).HasColumnName("venta_id");
             entity.Property(e => e.ClienteId).HasColumnName("cliente_id");
             entity.Property(e => e.Estado)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasDefaultValue("Completada")
+                .HasColumnType("bit")
+                .HasDefaultValue(true)
                 .HasColumnName("estado");
             entity.Property(e => e.FechaVenta)
                 .HasDefaultValueSql("(getdate())")

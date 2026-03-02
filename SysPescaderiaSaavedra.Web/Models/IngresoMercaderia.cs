@@ -14,6 +14,7 @@ public partial class IngresoMercaderia
     public DateTime FechaIngreso { get; set; }
 
     public decimal TotalCompra { get; set; }
+    public bool Estado { get; set; }
 
     public virtual ICollection<Lote> Lotes { get; set; } = new List<Lote>();
 
